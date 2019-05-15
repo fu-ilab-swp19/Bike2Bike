@@ -1,0 +1,92 @@
+00:22:55 **** Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:26:38 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:27:04 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:27:50 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:28:25 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:34:58 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "hello-world" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:51:21 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Makefile:23: /Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include: No such file or directory
+make: *** No rule to make target `/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include'.  Stop.
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:53:53 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Makefile:23: /Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include: No such file or directory
+make: *** No rule to make target `/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include'.  Stop.
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:54:08 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Makefile:23: /Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include: No such file or directory
+make: *** No rule to make target `/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include'.  Stop.
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:54:11 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Makefile:23: /Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include: No such file or directory
+make: *** No rule to make target `/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/../RIOT/Makefile.include'.  Stop.
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:58:20 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "Task02" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+00:58:34 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "Task02" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
+01:04:45 **** Incremental Build of configuration Default for project playground ****
+make BOARD=native all 
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Building application "Task02" for "native" with MCU "native".
+
+env: python3: No such file or directory
+make: *** [/Volumes/data/janos/Develop/RIOT/RIOT/projects/playground/bin/native/riotbuild/riotbuild.h] Error 127
+"make BOARD=native all" terminated with exit code 2. Build might be incomplete.
