@@ -5,7 +5,7 @@ APPLICATION = nimble_gatt
 BOARD ?= airfy-beacon
 
 # So far, NimBLE only works on nRF52 based platforms
-BOARD_WHITELIST := nrf52dk nrf52840dk nrf52832-mdk
+BOARD_WHITELIST := nrf52dk nrf52840dk nrf52832-mdk airfy-beacon
 
 # This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/RIOT
