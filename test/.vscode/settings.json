@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "nrfble.h": "c",
+        "netdev.h": "c"
+    }
+}
