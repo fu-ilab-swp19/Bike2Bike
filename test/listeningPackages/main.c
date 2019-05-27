@@ -38,19 +38,20 @@ int _cmd_scan(int argc, char ** argv) {
             }
             if(res == BLUETIL_AD_OK) {
                 printf("Device name: %s\n", name);
-                printf("Data: ");
+                printf("Raw data: ");
                 for(uint8_t i = 0; i < entry->ad_len; i++) {
                     printf("%02X ", entry->ad[i]);
                 }
                 printf("\nCompany id: ");
                 for(size_t i = 0; i < company_id.len; i++) {
+                    if(i == 1) {
+                        printf("\nData: ");
+                    }
                     printf("%02X", company_id.data[i]);
+                    
                 }
                 printf("\n------------------\n");
             }
-            
-        
-            
             entry = nimble_scanlist_get_next(entry);
         }
     }
