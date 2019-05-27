@@ -8,7 +8,7 @@ BOARD ?= airfy-beacon
 BOARD_WHITELIST := nrf52dk nrf52840dk nrf52832-mdk airfy-beacon
 
 # This has to be the absolute path to the RIOT base directory:
-RIOTBASE ?= $(CURDIR)/../../xRIOT
+RIOTBASE ?= $(CURDIR)/../../RIOT
 
 # Include NimBLE
 USEPKG += nimble
