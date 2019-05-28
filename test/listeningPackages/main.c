@@ -10,19 +10,20 @@
 #include "nimble_scanner.h"
 #include "nimble_scanlist.h"
 
-#define DEFAULT_DURATION        (1000000U)
+#define DEFAULT_DURATION        (3)
+
+const uint8_t B2B_ID[] = {0x13, 0x37};
 
 int _cmd_scan(int argc, char ** argv) {
-    uint32_t timeout = DEFAULT_DURATION;
-
-    printf("Scanning for %ums in every interval now...", (unsigned)(timeout /1000));
+    printf("%02X", B2B_ID[0]);
+    printf("%02X\n", B2B_ID[1]);
     nimble_scanlist_entry_t* entry = NULL;
-    for(int i = 0; i < 3; i++) {
-
+    for(int i = 0; i < 10; i++) {
         nimble_scanlist_clear();
         printf("Scanning...\n");
+        printf("------------------\n");
         nimble_scanner_start();
-        xtimer_sleep(1);
+        xtimer_sleep(3);
         nimble_scanner_stop();
         entry = nimble_scanlist_get_next(entry);
         while(entry) {
@@ -36,24 +37,28 @@ int _cmd_scan(int argc, char ** argv) {
             if (res != BLUETIL_AD_OK) {
                 res = bluetil_ad_find_str(&ad, BLE_GAP_AD_NAME_SHORT, name, sizeof(name));
             }
-            if(res == BLUETIL_AD_OK) {
-                printf("Device name: %s\n", name);
-                printf("Raw data: ");
-                for(uint8_t i = 0; i < entry->ad_len; i++) {
-                    printf("%02X ", entry->ad[i]);
-                }
-                printf("\nCompany id: ");
-                for(size_t i = 0; i < company_id.len; i++) {
-                    if(i == 1) {
-                        printf("\nData: ");
+            if(res == BLUETIL_AD_OK && company_id.len >= sizeof(B2B_ID)) {
+                if(memcmp(company_id.data, (void*)B2B_ID, sizeof(B2B_ID)) == 0) {
+                    printf("Device name: %s\n", name);
+                    printf("Raw data: ");
+                    for(uint8_t i = 0; i < entry->ad_len; i++) {
+                        printf("%02X ", entry->ad[i]);
                     }
-                    printf("%02X", company_id.data[i]);
-                    
+                    printf("\nCompany id: ");
+                    for(size_t i = 0; i < company_id.len; i++) {
+                        if(i == 2) {
+                            printf("\nData: ");
+                        }
+                        printf("%02X", company_id.data[i]);
+                        
+                    }
+                    printf("\n------------------\n");
                 }
-                printf("\n------------------\n");
             }
             entry = nimble_scanlist_get_next(entry);
         }
+        printf("Scanning completed. Loop %i from 10. Sleeping 10sec now...\n", i);
+        xtimer_sleep(10);
     }
     (void)argc;
     (void)argv;
