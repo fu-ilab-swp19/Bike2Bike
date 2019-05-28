@@ -38,6 +38,9 @@
 #include "nimble_riot.h"
 #include "net/bluetil/ad.h"
 
+#include "shell.h"
+#include "shell_commands.h"
+
 #include "host/ble_hs.h"
 #include "host/util/util.h"
 #include "host/ble_gatt.h"
@@ -310,6 +313,7 @@ int main(void)
     puts("NimBLE GATT Server Example");
 
     int rc = 0;
+	uint8_t test[] = {0x13, 0x37, 0x42, 0x42, 0x42, 0x42, 0x42};
 
     /* verify and add our custom services */
     rc = ble_gatts_count_cfg(gatt_svr_svcs);
@@ -327,8 +331,11 @@ int main(void)
     bluetil_ad_t ad;
     bluetil_ad_init_with_flags(&ad, buf, sizeof(buf), BLUETIL_AD_FLAGS_DEFAULT);
     bluetil_ad_add_name(&ad, device_name);
-    ble_gap_adv_set_data(ad.buf, ad.pos);
 
+	bluetil_ad_add(&ad, BLE_GAP_AD_DEVICE_ID, test, sizeof(test));
+
+
+    ble_gap_adv_set_data(ad.buf, ad.pos);
     /* start to advertise this node */
     start_advertise();
 
