@@ -37,12 +37,13 @@ int _cmd_scan(int argc, char ** argv) {
             if (res != BLUETIL_AD_OK) {
                 res = bluetil_ad_find_str(&ad, BLE_GAP_AD_NAME_SHORT, name, sizeof(name));
             }
+            
             if(res == BLUETIL_AD_OK && company_id.len >= sizeof(B2B_ID)) {
                 if(memcmp(company_id.data, (void*)B2B_ID, sizeof(B2B_ID)) == 0) {
                     printf("Device name: %s\n", name);
                     printf("Raw data: ");
                     for(uint8_t i = 0; i < entry->ad_len; i++) {
-                        printf("%02X ", entry->ad[i]);
+                        printf("%02X", entry->ad[i]);
                     }
                     printf("\nCompany id: ");
                     for(size_t i = 0; i < company_id.len; i++) {
