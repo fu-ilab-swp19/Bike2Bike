@@ -16,6 +16,7 @@ USEMODULE += shell
 
 # configure and use Nimble
 USEPKG += nimble
+
 USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist
 
@@ -23,6 +24,8 @@ USEMODULE += nimble_scanlist
 # which is not needed in a production environment but helps in the
 # development process:
 #DEVELHELP ?= 1
+
+CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=50
 
 # Change this to 0 show compiler invocation lines by default:
 QUIET ?= 1
