@@ -2,7 +2,7 @@
 APPLICATION = bike2bike
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= nrf52dk
+BOARD ?= airfy-beacon
 
 # Only written for nrf52dk!
 BOARD_WHITELIST := nrf52dk airfy-beacon
@@ -12,11 +12,14 @@ RIOTBASE ?= $(CURDIR)/../RIOT
 
 USEPKG += nimble
 
-USEMODULE += xtimer
+#USEMODULE += xtimer
 USEMODULE += shell
-USEMODULE += nimble_svc_gap
+#USEMODULE += nimble_svc_gap
+USEMODULE += bluetil_ad
+#USEMODULE += nimble_scanlist
 
-BLE_RESERVED_PACKAGE_SIZE = 50
+
+BLE_RESERVED_PACKAGE_SIZE = 150
 CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)
 
 # Comment this out to disable code in RIOT that does safety checking
