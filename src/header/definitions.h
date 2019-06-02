@@ -1,4 +1,4 @@
-#ifndef DEFINITIONS_H 
+#ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
 #ifdef __cplusplus
@@ -7,7 +7,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#define _b2b_own_id =                1;
+
 
 #define B2B_TYPE_NONE               (0x0)
 #define B2B_TYPE_USER               (0x1)
@@ -27,6 +27,7 @@ extern "C" {
 extern const char*   B2B_ADV_NAME;
 extern const uint8_t B2B_RECONGITION_ID[B2B_AD_RECOGNITION_ID_SIZE];
 
+extern uint8_t       _b2b_own_id;
 extern uint8_t       _b2b_cmd_counter;
 extern uint8_t       _b2b_user_type;
 

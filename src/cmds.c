@@ -16,6 +16,14 @@ int _cmd_test_recv(int argc, char** argv) {
     return 0;
 }
 
+int _cmd_set_id(int argc, char** argv) {
+    if(argc >= 2) {
+        _b2b_own_id = atoi(argv[1]);
+    }
+    printf("Your node id is now: %d\n", _b2b_own_id);
+    return 0;
+}
+
 int _cmd_send_no_cmd(int argc, char** argv) {
     if (_b2b_user_type != B2B_TYPE_LEADER) {
         printf("Not allowed command: _cmd_send_no_cmd : You are not leader\n");

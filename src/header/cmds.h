@@ -15,6 +15,8 @@ extern "C" {
 int _cmd_test_adv(int argc, char** argv);
 int _cmd_test_recv(int argc, char** argv);
 
+int _cmd_set_id(int argc, char** argv);
+
 int _cmd_send_left(int argc, char** argv);
 int _cmd_send_right(int argc, char** argv);
 int _cmd_send_stop(int argc, char** argv);
@@ -23,6 +25,7 @@ int _cmd_sync_lead(int argc, char** argv);
 int _cmd_sync_member(int argc, char** argv);
 
 static const shell_command_t _commands[] = {
+    { "set_id", "set your own node id", _cmd_set_id },
     { "test_adv", "make a test advertising", _cmd_test_adv },
     { "test_recv", "receive ble data and print it out", _cmd_test_recv},
     { "send_left", "(lead) send signal to others: left", _cmd_send_left},
