@@ -7,21 +7,28 @@ extern "C" {
 
 #include <stdio.h>
 
-extern uint8_t       _cmd_counter;
-extern uint8_t       _user_type;
+#define _b2b_own_id =                1;
 
-#define _own_id =         {0x01};
+#define B2B_TYPE_NONE               (0x0)
+#define B2B_TYPE_USER               (0x1)
+#define B2B_TYPE_LEADER             (0x2)
 
-#define B2B_TYPE_USER           (0x0)
-#define B2B_TYPE_LEADER         (0x1)
+#define B2B_CMD_SYNC_LEADER         (0x00)
+#define B2B_CMD_SYNC_MEMBER         (0x01)
 
-#define B2B_CMD_SYNC_LEADER     (0x00)
-#define B2B_CMD_SYNC_MEMBER     (0x01)
+#define B2B_CMD_LEFT                (0x02)
+#define B2B_CMD_RIGHT               (0x03)
+#define B2B_CMD_STOP                (0x04)
+#define B2B_CMD_NO_CMD              (0x05)
 
-#define B2B_CMD_LEFT            (0x02)
-#define B2B_CMD_RIGHT           (0x03)
-#define B2B_CMD_STOP            (0x04)
-#define B2B_CMD_NO_CMD          (0x05)
+#define B2B_AD_RECOGNITION_ID_SIZE  (4)
+#define B2B_AD_SIZE                 (4)
+
+extern const char*   B2B_AD_NAME;
+extern const uint8_t B2B_RECONGITION_ID[B2B_AD_RECOGNITION_ID_SIZE];
+
+extern uint8_t       _b2b_cmd_counter;
+extern uint8_t       _b2b_user_type;
 
 #ifdef __cplusplus
 }
