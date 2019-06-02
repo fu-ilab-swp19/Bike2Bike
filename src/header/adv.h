@@ -19,8 +19,6 @@ extern "C" {
 
 int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter);
 
-
-
 #ifdef __cplusplus
 }
 #endif

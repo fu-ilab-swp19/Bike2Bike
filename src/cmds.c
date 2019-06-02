@@ -1,22 +1,5 @@
 #include "header/cmds.h"
 
-
-int _cmd_test_adv(int argc, char** argv) {
-    printf("Test advertising...\n");
-    
-    (void) argc;
-    (void) argv;
-    return 0;
-}
-
-int _cmd_test_recv(int argc, char** argv) {
-    printf("Test receiving...\n");
-
-    (void) argc;
-    (void) argv;
-    return 0;
-}
-
 int _cmd_set_id(int argc, char** argv) {
     if(argc >= 2) {
         _b2b_own_id = atoi(argv[1]);
@@ -33,11 +16,19 @@ int _cmd_set_leader(int argc, char** argv) {
     return 0;
 }
 
+int _cmd_recv_packets(int argc, char** argv) {
+    recv_scan_for_new_packets();
+    (void) argc;
+    (void) argv;
+    return 0;
+}
+
 int _cmd_send_no_cmd(int argc, char** argv) {
     if (_b2b_user_type != B2B_TYPE_LEADER) {
         printf("Not allowed command: _cmd_send_no_cmd : You are not leader\n");
         return 0;
     }
+    _b2b_cmd_counter++;
     adv_advertise_packet(B2B_CMD_NO_CMD, _b2b_own_id, _b2b_cmd_counter);
     printf("Sending command: Right\n");
 
@@ -52,6 +43,7 @@ int _cmd_send_left(int argc, char** argv) {
         return 0;
     }
     
+    _b2b_cmd_counter++;
     adv_advertise_packet(B2B_CMD_LEFT, _b2b_own_id, _b2b_cmd_counter);
 
     printf("Sending command: Left\n");
@@ -66,27 +58,31 @@ int _cmd_send_right(int argc, char** argv) {
         printf("Not allowed command: _cmd_send_right : You are not leader\n");
         return 0;
     }
+    _b2b_cmd_counter++;
     adv_advertise_packet(B2B_CMD_RIGHT, _b2b_own_id, _b2b_cmd_counter);
     printf("Sending command: Right\n");
-    
+
     (void) argc;
     (void) argv;
     return 0;
 }
 
 int _cmd_send_stop(int argc, char** argv) {
+    _b2b_cmd_counter += 10;
     adv_advertise_packet(B2B_CMD_STOP, _b2b_own_id, _b2b_cmd_counter);
     printf("Sending command: Stop\n");
+    
     (void) argc;
     (void) argv;
     return 0;
 }
 
-int _cmd_sync_lead(int argc, char** argv) {
+int _cmd_sync_leader(int argc, char** argv) {
     if (_b2b_user_type != B2B_TYPE_LEADER) {
-        printf("Not allowed command: _cmd_sync_lead : You are not leader\n");
+        printf("Not allowed command: _cmd_sync_leader : You are not leader\n");
         return 0;
     }
+    _b2b_cmd_counter++;
     adv_advertise_packet(B2B_CMD_SYNC_LEADER, _b2b_own_id, _b2b_cmd_counter);
     printf("Sending command: Sync lead\n");
     (void) argc;

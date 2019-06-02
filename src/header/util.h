@@ -12,6 +12,7 @@ extern "C" {
 #include "definitions.h"
 
 size_t get_own_id_length(void);
+void print_b2b_packet(uint8_t* data);
 
 #ifdef __cplusplus
 }

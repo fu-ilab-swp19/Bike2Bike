@@ -13,3 +13,30 @@ size_t get_own_id_length(void) {
     }
     return len;
 }
+
+void print_b2b_packet(uint8_t* data) {
+    printf("Bike2Bike Packet: \n");
+    printf("Sender id: %d\n", data[4]);
+    printf("Command counter: %d\n", data[5]);
+    switch(data[6]) {
+        case B2B_CMD_LEFT:
+            printf("Command: left\n");
+            break;
+        case B2B_CMD_RIGHT:
+            printf("Command: right\n");
+            break;
+        case B2B_CMD_STOP:
+            printf("Command: stop\n");
+            break;
+        case B2B_CMD_NO_CMD:
+            printf("Command: no command\n");
+            break;
+        case B2B_CMD_SYNC_LEADER:
+            printf("Command: sync leader\n");
+            break;
+        case B2B_CMD_SYNC_MEMBER:
+            printf("Command: sync member\n");
+            break;
+    }
+    printf("----------------------\n");
+}

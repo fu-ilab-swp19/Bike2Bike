@@ -32,10 +32,8 @@ static int gap_event_cb(struct ble_gap_event *event, void *arg)
             start_advertise();
             break;
     }
-
     return 0;
 }
-
 
 int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_t ad;
@@ -67,9 +65,10 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
 
     printf("Raw data: ");
     for(size_t i = 0; i < sizeof(data); i++) {
-        printf("%02X", data[i]);
+        printf("%02X ", data[i]);
     }
     printf("\n");
+    printf("Data size: %d\n", sizeof(data));
     bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data, sizeof(data));
  
     ble_gap_adv_set_data(ad.buf, ad.pos);

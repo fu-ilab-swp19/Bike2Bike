@@ -1,4 +1,5 @@
 #include "header/cmds.h"
+#include "header/recv.h"
 
 const uint8_t B2B_RECONGITION_ID[] = {0x42, 0x69, 0x6B, 0x65};
 const char   B2B_ADV_NAME[] = "B2B-NODE ";
@@ -11,6 +12,8 @@ void init(void) {
     _b2b_user_type = B2B_TYPE_MEMBER;
     _b2b_cmd_counter = 0;
     _b2b_own_id = 1;
+
+    recv_init();
 }
 
 int main(void) {

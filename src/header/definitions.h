@@ -8,7 +8,6 @@ extern "C" {
 #include <stdio.h>
 
 
-
 #define B2B_TYPE_NONE               (0x0)
 #define B2B_TYPE_MEMBER             (0x1)
 #define B2B_TYPE_LEADER             (0x2)

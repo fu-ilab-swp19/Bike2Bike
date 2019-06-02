@@ -12,6 +12,7 @@ extern "C" {
 #include "shell_commands.h"
 #include "definitions.h"
 #include "adv.h"
+#include "recv.h"
 
 #include "nimble_riot.h"
 #include "net/bluetil/ad.h"
@@ -21,29 +22,29 @@ extern "C" {
 //#include "services/gap/ble_svc_gap.h"
 #include "net/bluetil/ad.h"
 
-int _cmd_test_adv(int argc, char** argv);
-int _cmd_test_recv(int argc, char** argv);
-
 int _cmd_set_id(int argc, char** argv);
 int _cmd_set_leader(int argc, char** argv);
 
 int _cmd_send_left(int argc, char** argv);
 int _cmd_send_right(int argc, char** argv);
 int _cmd_send_stop(int argc, char** argv);
+int _cmd_send_no_cmd(int argc, char** argv);
 
-int _cmd_sync_lead(int argc, char** argv);
+int _cmd_sync_leader(int argc, char** argv);
 int _cmd_sync_member(int argc, char** argv);
+
+int _cmd_recv_packets(int argc, char** argv);
 
 static const shell_command_t _commands[] = {
     { "set_id", "set your own node id", _cmd_set_id },
     { "set_leader", "set user type to leader", _cmd_set_leader},
-    { "test_adv", "make a test advertising", _cmd_test_adv },
-    { "test_recv", "receive ble data and print it out", _cmd_test_recv},
     { "send_left", "(lead) send signal to others: left", _cmd_send_left},
     { "send_right", "(lead) send signal to others: right", _cmd_send_right},
     { "send_stop", "(member) send signal to leader: stop", _cmd_send_stop},
-    { "sync_lead", "(lead) initiate leader sync", _cmd_sync_lead},
+    { "send_no_cmd", "(lead) send no cmd", _cmd_send_no_cmd},
+    { "sync_leader", "(lead) initiate leader sync", _cmd_sync_leader},
     { "sync_member", "(member) initiate member sync", _cmd_sync_member},
+    { "recv_packets", "receive packets and filter for b2b packets", _cmd_recv_packets},
     { NULL, NULL, NULL }
 };
 

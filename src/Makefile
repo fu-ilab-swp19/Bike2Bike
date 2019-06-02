@@ -2,7 +2,7 @@
 APPLICATION = bike2bike
 
 # If no BOARD is found in the environment, use this default:
-BOARD ?= airfy-beacon
+BOARD ?= nrf52dk
 
 # Only written for nrf52dk!
 BOARD_WHITELIST := nrf52dk airfy-beacon
@@ -12,11 +12,12 @@ RIOTBASE ?= $(CURDIR)/../RIOT
 
 USEPKG += nimble
 
-#USEMODULE += xtimer
+USEMODULE += xtimer
 USEMODULE += shell
 #USEMODULE += nimble_svc_gap
 USEMODULE += bluetil_ad
-#USEMODULE += nimble_scanlist
+USEMODULE += nimble_scanner
+USEMODULE += nimble_scanlist
 
 
 BLE_RESERVED_PACKAGE_SIZE = 150
