@@ -1,7 +1,7 @@
 #include "header/cmds.h"
 
 const uint8_t B2B_RECONGITION_ID[] = {0x1, 0x3, 0x3, 0x7};
-const char*   B2B_AD_NAME = "B2B-NODE ";
+const char*   B2B_ADV_NAME = "B2B-NODE ";
 
 uint8_t _b2b_user_type;
 uint8_t _b2b_cmd_counter;
