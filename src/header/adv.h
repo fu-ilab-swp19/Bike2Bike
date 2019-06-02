@@ -17,6 +17,8 @@ extern "C" {
 #include "host/util/util.h"
 #include "services/gap/ble_svc_gap.h"
 
+#include "definitions.h"
+
 #ifdef __cplusplus
 }
 #endif

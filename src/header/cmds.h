@@ -10,6 +10,7 @@ extern "C" {
 #include "xtimer.h"
 #include "shell.h"
 #include "shell_commands.h"
+#include "definitions.h"
 
 int _cmd_test_adv(int argc, char** argv);
 int _cmd_test_recv(int argc, char** argv);
