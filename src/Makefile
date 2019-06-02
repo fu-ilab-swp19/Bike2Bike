@@ -1,5 +1,5 @@
 # name of your application
-APPLICATION = advertising
+APPLICATION = bike2bike
 
 # If no BOARD is found in the environment, use this default:
 BOARD ?= airfy-beacon
@@ -28,3 +28,4 @@ CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)
 QUIET ?= 1
 
 include $(RIOTBASE)/Makefile.include
+include $(RIOTBASE)/dist/testbed-support/Makefile.iotlab
