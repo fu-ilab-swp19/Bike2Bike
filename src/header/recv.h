@@ -14,9 +14,11 @@ extern "C" {
 #include "xtimer.h"
 #include "definitions.h"
 #include "util.h"
+#include "adv.h"
 
 int recv_scan_for_new_packets(void);
 void recv_init(void);
+void recv_analyze_b2b_packet(uint8_t* data);
 
 #ifdef __cplusplus
 }

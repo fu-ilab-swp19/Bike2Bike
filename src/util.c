@@ -15,7 +15,6 @@ size_t get_own_id_length(void) {
 }
 
 void print_b2b_packet(uint8_t* data) {
-    printf("Bike2Bike Packet: \n");
     printf("Sender id: %d\n", data[4]);
     printf("Command counter: %d\n", data[5]);
     switch(data[6]) {

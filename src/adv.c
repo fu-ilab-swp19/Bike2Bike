@@ -68,14 +68,20 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
         printf("%02X ", data[i]);
     }
     printf("\n");
-    printf("Data size: %d\n", sizeof(data));
+    
+    //printf("Data size: %d\n", sizeof(data));
     bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data, sizeof(data));
  
     ble_gap_adv_set_data(ad.buf, ad.pos);
+
+    _b2b_current_cmd_counter = cmd_counter;
+    _b2b_current_sent_cmd = cmd;
     start_advertise();
 
     return 0;
 }
+
+
 
 
 

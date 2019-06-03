@@ -24,6 +24,7 @@ extern "C" {
 
 int _cmd_set_id(int argc, char** argv);
 int _cmd_set_leader(int argc, char** argv);
+int _cmd_set_cmd_counter(int argc, char** argv);
 
 int _cmd_send_left(int argc, char** argv);
 int _cmd_send_right(int argc, char** argv);
@@ -38,6 +39,7 @@ int _cmd_recv_packets(int argc, char** argv);
 static const shell_command_t _commands[] = {
     { "set_id", "set your own node id", _cmd_set_id },
     { "set_leader", "set user type to leader", _cmd_set_leader},
+    { "set_cmd_counter", "set command counter", _cmd_set_cmd_counter},
     { "send_left", "(lead) send signal to others: left", _cmd_send_left},
     { "send_right", "(lead) send signal to others: right", _cmd_send_right},
     { "send_stop", "(member) send signal to leader: stop", _cmd_send_stop},

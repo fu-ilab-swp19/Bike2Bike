@@ -27,8 +27,10 @@ extern const char   B2B_ADV_NAME[10];
 extern const uint8_t B2B_RECONGITION_ID[B2B_AD_RECOGNITION_ID_SIZE];
 
 extern uint8_t       _b2b_own_id;
-extern uint8_t       _b2b_cmd_counter;
 extern uint8_t       _b2b_user_type;
+extern int8_t        _b2b_current_leader_id;
+extern int8_t        _b2b_current_sent_cmd;
+extern uint8_t       _b2b_current_cmd_counter;
 
 #ifdef __cplusplus
 }
