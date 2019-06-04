@@ -17,8 +17,8 @@ ifneq (,$(filter nimble_controller,$(USEMODULE)))
   CFLAGS += -DNIMBLE_CFG_CONTROLLER=1
   CFLAGS += -DMYNEWT_VAL_OS_CPUTIME_FREQ=32768
 
-  ifneq (,$(filter nimble_drivers_nrf52,$(USEMODULE)))
-    INCLUDES += $(NIMIBASE)/nimble/drivers/nrf52/include
+  ifneq (,$(filter nimble_drivers_nrf5x,$(USEMODULE)))
+    INCLUDES += $(NIMIBASE)/nimble/drivers/$(CPU_FAM)/include
   endif
 endif
 
@@ -61,9 +61,6 @@ ifneq (,$(filter nimble_svc_gatt,$(USEMODULE)))
 endif
 ifneq (,$(filter nimble_svc_ias,$(USEMODULE)))
   INCLUDES += $(NIMIBASE)/nimble/host/services/ias/include
-endif
-ifneq (,$(filter nimble_svc_ipss,$(USEMODULE)))
-  INCLUDES += $(NIMIBASE)/nimble/host/services/ipss/include
 endif
 ifneq (,$(filter nimble_svc_lls,$(USEMODULE)))
   INCLUDES += $(NIMIBASE)/nimble/host/services/lls/include

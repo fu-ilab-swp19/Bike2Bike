@@ -295,7 +295,7 @@ gnrc_pktsnip_t *gnrc_ipv6_ext_build(gnrc_pktsnip_t *ipv6, gnrc_pktsnip_t *next,
         }
     }
 
-    snip = gnrc_pktbuf_add(next, NULL, size, GNRC_NETTYPE_IPV6_EXT);
+    snip = gnrc_pktbuf_add(next, NULL, size, GNRC_NETTYPE_IPV6);
 
     if (snip == NULL) {
         return NULL;

@@ -17,9 +17,7 @@ char stack[THREAD_STACKSIZE_MAIN];
 void* thread_program(void* arg) {
     while(true) {
         recv_scan_for_new_packets();
-        //printf("Gehe 2 Sekunden schlafen!\n");
         xtimer_sleep(2);
-        //printf("Guten morgen!\n");
     }
     (void) arg;
     return NULL;
