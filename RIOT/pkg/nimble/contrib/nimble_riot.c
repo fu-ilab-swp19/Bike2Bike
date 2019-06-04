@@ -31,9 +31,12 @@
 #ifdef MODULE_NIMBLE_SVC_GATT
 #include "services/gatt/ble_svc_gatt.h"
 #endif
+#ifdef MODULE_NIMBLE_SVC_IPSS
+#include "services/ipss/ble_svc_ipss.h"
+#endif
 
 #ifdef MODULE_NIMBLE_CONTROLLER
-#if defined(CPU_FAM_NRF52) || defined(CPU_FAM_NRF51)
+#ifdef CPU_FAM_NRF52
 #include "nrf_clock.h"
 #endif
 
@@ -53,10 +56,9 @@ static void *_host_thread(void *arg)
 
 #ifdef MODULE_NIMBLE_CONTROLLER
     /* XXX: NimBLE needs the nRF5x's LF clock to run */
-#if defined(CPU_FAM_NRF52) || defined(CPU_FAM_NRF51)
+#ifdef CPU_FAM_NRF52
     clock_start_lf();
 #endif
-
     /* Run the controller
      *
      * Create task where NimBLE LL will run. This one is required as LL has its
@@ -103,5 +105,8 @@ void nimble_riot_init(void)
 #endif
 #ifdef MODULE_NIMBLE_SVC_GATT
     ble_svc_gatt_init();
+#endif
+#ifdef MODULE_NIMBLE_SVC_IPSS
+    ble_svc_ipss_init();
 #endif
 }

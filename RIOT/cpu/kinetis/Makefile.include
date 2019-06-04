@@ -36,9 +36,6 @@ LINKFLAGS += $(LINKFLAGPREFIX)--defsym=_ram_length=$(RAM_LEN)
 # add the CPU specific flash configuration field for the linker
 export UNDEF += $(BINDIR)/cpu/fcfield.o
 
-# include common periph drivers
-USEMODULE += periph_common
-
 # select kinetis periph drivers
 ifeq (EA,$(KINETIS_SERIES))
 USEMODULE += periph_ics
@@ -46,9 +43,5 @@ else
 USEMODULE += periph_mcg
 endif
 USEMODULE += periph_wdog
-
-# Define a recipe to build the watchdog disable binary, used when flashing
-$(RIOTCPU)/$(CPU)/dist/wdog-disable.bin: $(RIOTCPU)/$(CPU)/dist/wdog-disable.s
-	$(Q)$(MAKE) -C $(RIOTCPU)/$(CPU)/dist/ $(notdir $@)
 
 include $(RIOTMAKE)/arch/cortexm.inc.mk

@@ -54,6 +54,9 @@ nimble_svc_gap:
 nimble_svc_gatt:
 	"$(MAKE)" -C $(PDIR)/nimble/host/services/gatt/src/ -f $(TDIR)/svc.gatt.mk
 
+nimble_svc_ipss:
+	"$(MAKE)" -C $(PDIR)/nimble/host/services/ipss/src/ -f $(TDIR)/svc.ipss.mk
+
 # controller specific modules
 nimble_transport_ram:
 	"$(MAKE)" -C $(PDIR)/nimble/transport/ram/src/ -f $(TDIR)/transport.ram.mk
@@ -61,8 +64,8 @@ nimble_transport_ram:
 nimble_controller:
 	"$(MAKE)" -C $(PDIR)/nimble/controller/src/ -f $(TDIR)/controller.mk
 
-nimble_drivers_nrf5x:
-	"$(MAKE)" -C $(PDIR)/nimble/drivers/$(CPU_FAM)/src/ -f $(TDIR)/drivers.nrf5x.mk
+nimble_drivers_nrf52:
+	"$(MAKE)" -C $(PDIR)/nimble/drivers/nrf52/src/ -f $(TDIR)/drivers.nrf52.mk
 
 # additional, RIOT specific nimble modules
 nimble_addr:
