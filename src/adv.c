@@ -47,7 +47,7 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_init_with_flags(&ad, buf, sizeof(buf), BLUETIL_AD_FLAGS_DEFAULT);
 
     // prepare advertising name
-    char name[get_own_id_length() + sizeof(B2B_ADV_NAME)];
+    char name[util_get_own_id_length() + sizeof(B2B_ADV_NAME)];
 
     snprintf(name, sizeof(name), "%s%i", B2B_ADV_NAME, _b2b_own_id); 
     bluetil_ad_add_name(&ad, name);
