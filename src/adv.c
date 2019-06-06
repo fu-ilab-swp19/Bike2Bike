@@ -53,15 +53,13 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_add_name(&ad, name);
 
     // prepare our own protocol data
-    uint8_t data[B2B_AD_RECOGNITION_ID_SIZE + B2B_AD_SIZE];
-    // bike2bike recognition id
-    memcpy(data, B2B_RECONGITION_ID, sizeof(B2B_RECONGITION_ID));
+    uint8_t data[B2B_AD_SIZE];
     // sender id (from  package)
-    memcpy(data + B2B_AD_RECOGNITION_ID_SIZE, &sender_id, sizeof(sender_id));
+    memcpy(data, &sender_id, sizeof(sender_id));
     // command counter
-    memcpy(data + B2B_AD_RECOGNITION_ID_SIZE + sizeof(sender_id), &cmd_counter, sizeof(cmd_counter));
+    memcpy(data + sizeof(sender_id), &cmd_counter, sizeof(cmd_counter));
     // cmd
-    memcpy(data + B2B_AD_RECOGNITION_ID_SIZE + sizeof(sender_id) + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
+    memcpy(data + sizeof(sender_id) + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
 
     printf("Raw data (Size: %d): ", sizeof(data));
     for(size_t i = 0; i < sizeof(data); i++) {

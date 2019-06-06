@@ -23,11 +23,10 @@ extern "C" {
 #define B2B_CMD_STOP                (0x04)
 #define B2B_CMD_NO_CMD              (0x05)
 
-#define B2B_AD_RECOGNITION_ID_SIZE  (0x04)
 #define B2B_AD_SIZE                 (0x03)
+#define B2B_ADV_NAME_BASE_SIZE      (0x08)
 
 extern const char   B2B_ADV_NAME[10];
-extern const uint8_t B2B_RECONGITION_ID[B2B_AD_RECOGNITION_ID_SIZE];
 
 extern cipher_t      _b2b_cipher;
 extern uint8_t       _b2b_aes_key[AES_KEY_SIZE];

@@ -29,10 +29,13 @@ int recv_scan_for_new_packets(void) {
     while(e) {
         bluetil_ad_t ad = BLUETIL_AD_INIT(e->ad, e->ad_len, e->ad_len);
         bluetil_ad_data_t data;
-        int res = bluetil_ad_find(&ad, BLE_GAP_AD_SERVICE_DATA, &data);  
-        if(res == BLUETIL_AD_OK && data.len >= 4) {
-            if(memcmp(data.data, B2B_RECONGITION_ID, sizeof(B2B_AD_RECOGNITION_ID_SIZE)) == 0) {
-                recv_analyze_b2b_packet(data.data);
+        int res = bluetil_ad_find(&ad, BLE_GAP_AD_NAME, &data);  
+        if(res == BLUETIL_AD_OK && data.len >= B2B_ADV_NAME_BASE_SIZE) {
+            if(memcmp(data.data, B2B_ADV_NAME, B2B_ADV_NAME_BASE_SIZE) == 0) {
+                res = bluetil_ad_find(&ad, BLE_GAP_AD_SERVICE_DATA, &data);
+                if(res == BLUETIL_AD_OK) {
+                    recv_analyze_b2b_packet(data.data);
+                }
             }
         }
         e = nimble_scanlist_get_next(e);
@@ -41,12 +44,12 @@ int recv_scan_for_new_packets(void) {
 }
 
 void recv_analyze_b2b_packet(uint8_t* data) {
-    uint8_t sender = data[4];
-    uint8_t cmd_counter = data[5];
-    uint8_t cmd = data[6];
+    uint8_t sender = data[0];
+    uint8_t cmd_counter = data[1];
+    uint8_t cmd = data[2];
 
     if(_b2b_user_type == B2B_TYPE_LEADER) {
-        switch(data[6]) {
+        switch(cmd) {
             case B2B_CMD_STOP:
                 printf("Leader received new command: stop\n");
                 break;
@@ -65,7 +68,7 @@ void recv_analyze_b2b_packet(uint8_t* data) {
             }
         } else {
             if(sender == _b2b_current_leader_id){
-                switch(data[6]) {
+                switch(cmd) {
                     case B2B_CMD_LEFT:
                         printf("Member received new command: left\n");
                         adv_advertise_packet(cmd, sender, cmd_counter);
