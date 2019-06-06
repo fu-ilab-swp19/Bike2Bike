@@ -53,7 +53,7 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_add_name(&ad, name);
 
     // prepare our own protocol data
-    uint8_t data[B2B_AD_RECOGNITION_ID_SIZE*2 + B2B_AD_SIZE];
+    uint8_t data[B2B_AD_RECOGNITION_ID_SIZE + B2B_AD_SIZE];
     // bike2bike recognition id
     memcpy(data, B2B_RECONGITION_ID, sizeof(B2B_RECONGITION_ID));
     // sender id (from  package)
