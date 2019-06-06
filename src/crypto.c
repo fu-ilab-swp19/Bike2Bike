@@ -16,10 +16,10 @@ void crypto_init(void) {
     }
 }
 
-void encrypt(uint8_t* plain_data, uint8_t* cipher_data) {
+void crypto_encrypt(uint8_t* plain_data, uint8_t* cipher_data) {
     cipher_encrypt(&_b2b_cipher, plain_data, cipher_data);
 }
 
-void decrypt(uint8_t* cipher_data, uint8_t* plain_data) {
+void crypto_decrypt(uint8_t* cipher_data, uint8_t* plain_data) {
     cipher_decrypt(&_b2b_cipher, cipher_data, plain_data);
 }
