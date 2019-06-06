@@ -19,6 +19,7 @@ USEMODULE += bluetil_ad
 USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist
 USEMODULE += crypto
+USEMODULE += periph_gpio_irq
 
 
 BLE_RESERVED_PACKAGE_SIZE = 80
