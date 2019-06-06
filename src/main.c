@@ -1,10 +1,9 @@
 #include "header/cmds.h"
 #include "header/recv.h"
 #include "header/adv.h"
-#include "header/crypto.h"
+//#include "header/crypto.h"
 
 const uint8_t B2B_RECONGITION_ID[] = {0x42, 0x69, 0x6B, 0x65};
-const char   B2B_ADV_NAME[] = "B2B-NODE ";
 
 uint8_t _b2b_user_type;
 uint8_t _b2b_own_id;
@@ -31,7 +30,7 @@ void init(void) {
     _b2b_current_sent_cmd = -1;
     _b2b_current_cmd_counter = 0;
 
-    crypto_init();
+    //crypto_init();
     recv_init();
 }
 

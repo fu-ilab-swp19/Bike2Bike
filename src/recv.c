@@ -15,7 +15,6 @@ void recv_init(void) {
 }
 
 int recv_scan_for_new_packets(void) {
-    //printf("Start scanning environment\n");
     nimble_scanlist_clear();
 
     nimble_scanner_start();
@@ -25,7 +24,6 @@ int recv_scan_for_new_packets(void) {
     nimble_scanlist_entry_t* e = NULL;
 
     e = nimble_scanlist_get_next(e);
-    //printf("----------------------\n");
     while(e) {
         bluetil_ad_t ad = BLUETIL_AD_INIT(e->ad, e->ad_len, e->ad_len);
         bluetil_ad_data_t data;

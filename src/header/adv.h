@@ -16,6 +16,7 @@ extern "C" {
 
 #include "util.h"
 #include "definitions.h"
+//#include "crypto.h"
 
 int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter);
 

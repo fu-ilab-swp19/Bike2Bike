@@ -4,7 +4,6 @@ APPLICATION = bike2bike
 # If no BOARD is found in the environment, use this default:
 BOARD ?= airfy-beacon
 
-# Only written for nrf52dk!
 BOARD_WHITELIST := nrf52dk airfy-beacon
 
 # This has to be the absolute path to the RIOT base directory:
@@ -14,17 +13,16 @@ USEPKG += nimble
 
 USEMODULE += xtimer
 USEMODULE += shell
-#USEMODULE += nimble_svc_gap
 USEMODULE += bluetil_ad
 USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist
-USEMODULE += crypto
+#USEMODULE += crypto
 USEMODULE += periph_gpio_irq
 
 
 BLE_RESERVED_PACKAGE_SIZE = 80
 CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)
-CFLAGS += -DCRYPTO_AES
+#CFLAGS += -DCRYPTO_AES
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the
