@@ -1,6 +1,7 @@
 #include "header/cmds.h"
 #include "header/recv.h"
 #include "header/adv.h"
+#include "header/crypto.h"
 
 const uint8_t B2B_RECONGITION_ID[] = {0x42, 0x69, 0x6B, 0x65};
 const char   B2B_ADV_NAME[] = "B2B-NODE ";
@@ -30,12 +31,14 @@ void init(void) {
     _b2b_current_sent_cmd = -1;
     _b2b_current_cmd_counter = 0;
 
+    crypto_init();
     recv_init();
 }
 
 int main(void) {
     init();
-
+    uint8_t* test;
+    printf("Pointer Size: %d", sizeof(test));
     puts("Init completed\n");
     puts("Bike2Bike program started");
 
