@@ -30,21 +30,13 @@ int recv_scan_for_new_packets(void) {
         bluetil_ad_t ad = BLUETIL_AD_INIT(e->ad, e->ad_len, e->ad_len);
         bluetil_ad_data_t data;
         int res = bluetil_ad_find(&ad, BLE_GAP_AD_SERVICE_DATA, &data);  
-
-        if(res == BLUETIL_AD_OK && sizeof(data.data) >= 4) {
+        if(res == BLUETIL_AD_OK && data.len >= 4) {
             if(memcmp(data.data, B2B_RECONGITION_ID, sizeof(B2B_AD_RECOGNITION_ID_SIZE)) == 0) {
-                /*printf("Valid packet received (data size: %d) : Raw data: ", sizeof(data.data));
-                for(size_t i=0; i < sizeof(data.data)+3; i++) {
-                    printf("%02X ", data.data[i]);
-                }
-                printf("\n");
-                print_b2b_packet(data.data); */
                 recv_analyze_b2b_packet(data.data);
             }
         }
         e = nimble_scanlist_get_next(e);
     }   
-
     return 0;
 }
 
@@ -65,7 +57,7 @@ void recv_analyze_b2b_packet(uint8_t* data) {
     }
 
     if(_b2b_user_type == B2B_TYPE_MEMBER && cmd_counter > _b2b_current_cmd_counter) {
-        if(_b2b_current_leader_id == -1) {
+        if(_b2b_current_leader_id == -1 && _b2b_current_sent_cmd == B2B_CMD_SYNC_MEMBER) {
             if(cmd == B2B_CMD_SYNC_LEADER) {
                 printf("Member received new command: sync leader\n");
                 _b2b_current_leader_id = sender;
