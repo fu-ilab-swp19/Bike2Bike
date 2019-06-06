@@ -1,6 +1,6 @@
 #include "header/util.h"
 
-size_t get_own_id_length(void) {
+size_t util_get_own_id_length(void) {
     size_t len = 1;
     if(_b2b_own_id > 9) {
         if(_b2b_own_id > 99) {
@@ -14,10 +14,10 @@ size_t get_own_id_length(void) {
     return len;
 }
 
-void print_b2b_packet(uint8_t* data) {
-    printf("Sender id: %d\n", data[4]);
-    printf("Command counter: %d\n", data[5]);
-    switch(data[6]) {
+void util_print_b2b_packet(uint8_t* data) {
+    printf("Sender id: %d\n", data[0]);
+    printf("Command counter: %d\n", data[1]);
+    switch(data[3]) {
         case B2B_CMD_LEFT:
             printf("Command: left\n");
             break;
