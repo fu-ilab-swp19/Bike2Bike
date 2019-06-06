@@ -24,13 +24,6 @@ int _cmd_set_cmd_counter(int argc, char** argv) {
     return 0;
 }
 
-int _cmd_recv_packets(int argc, char** argv) {
-    recv_scan_for_new_packets();
-    (void) argc;
-    (void) argv;
-    return 0;
-}
-
 int _cmd_send_no_cmd(int argc, char** argv) {
     if (_b2b_user_type != B2B_TYPE_LEADER) {
         printf("Not allowed command: _cmd_send_no_cmd : You are not leader\n");
