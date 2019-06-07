@@ -20,7 +20,7 @@ USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist
 
 
-BLE_RESERVED_PACKAGE_SIZE = 70
+BLE_RESERVED_PACKAGE_SIZE = 80
 CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)
 
 # Comment this out to disable code in RIOT that does safety checking
