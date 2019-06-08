@@ -45,7 +45,9 @@ int _cmd_send_left(int argc, char** argv) {
     }
     
     _b2b_current_cmd_counter++;
+	signal_left_red();
     adv_advertise_packet(B2B_CMD_LEFT, _b2b_own_id, _b2b_current_cmd_counter);
+	
 
     printf("Sending command: Left\n");
     (void) argc;
@@ -60,6 +62,7 @@ int _cmd_send_right(int argc, char** argv) {
         return 0;
     }
     _b2b_current_cmd_counter++;
+	signal_right_red();
     adv_advertise_packet(B2B_CMD_RIGHT, _b2b_own_id, _b2b_current_cmd_counter);
     printf("Sending command: Right\n");
 

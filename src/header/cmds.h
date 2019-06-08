@@ -13,6 +13,7 @@ extern "C" {
 #include "definitions.h"
 #include "adv.h"
 #include "recv.h"
+#include "ledbutton.h"
 
 #include "nimble_riot.h"
 #include "net/bluetil/ad.h"
