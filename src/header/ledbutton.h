@@ -29,6 +29,10 @@ void signal_status_green(void);
 void signal_status_red(void);
 void led_init(void);
 
+void set_status_red(void);
+void signal_status_green(void);
+void reset_status(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -16,6 +16,7 @@ extern "C" {
 #include "util.h"
 #include "adv.h"
 #include "crypto.h"
+#include "ledbutton.h"
 
 int recv_scan_for_new_packets(void);
 void recv_init(void);

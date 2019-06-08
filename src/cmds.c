@@ -11,6 +11,7 @@ int _cmd_set_id(int argc, char** argv) {
 int _cmd_set_leader(int argc, char** argv) {
     _b2b_user_type = B2B_TYPE_LEADER;
     printf("You are leader now!\n");
+	set_status_red();
     (void) argc;
     (void) argv;
     return 0;

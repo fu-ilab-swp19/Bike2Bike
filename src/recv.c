@@ -38,7 +38,9 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                     util_print_uint8_hex(_b2b_aes_key, sizeof(_b2b_aes_key), 
                                     "Session AES128 key: ");
                     adv_advertising_stop();
+                    signal_status_green();
                 }
+				
             }
         } else {
             if(sender == _b2b_current_leader_id){
