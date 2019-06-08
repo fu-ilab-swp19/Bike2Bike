@@ -5,6 +5,10 @@
 
 
 uint32_t debounce_timer = 0;
+uint8_t data1 = 1; // left
+uint8_t data2 = 2; // right
+uint8_t data3 = 3; // set_leader
+uint8_t data4 = 4; 
 
 void btn_handler (void *arg){
 	if (xtimer_usec_from_ticks (xtimer_now()) - debounce_timer > 50000) {
@@ -17,10 +21,11 @@ void btn_handler (void *arg){
 			_cmd_send_right(0,NULL);
 		}
 		if (data == 3) { // set leader "sync_leader"
-    		_cmd_sync_leader(0,NULL);
+    		set_leader(0,NULL);
 			
 		}
 		if (data == 4) { // wait
+			sync_leader(0,NULL);
     		//gpio_write(4,1);
 		//	gpio_write(5,1);
 		}
@@ -100,15 +105,12 @@ void led_init(void) {
 	
 	// init button handler
 	
-	uint8_t data1 = 1; // left
+
 	gpio_init_int(7,GPIO_IN,GPIO_FALLING,btn_handler,&data1);
 	
-	uint8_t data2 = 2; // right
 	gpio_init_int(8,GPIO_IN,GPIO_FALLING,btn_handler,&data2);
 	
-	uint8_t data3 = 3; // set_leader
 	gpio_init_int(9,GPIO_IN,GPIO_FALLING,btn_handler,&data3);
-	
-	uint8_t data4 = 4; // wait
+
 	gpio_init_int(10,GPIO_IN,GPIO_FALLING,btn_handler,&data4);
 }
