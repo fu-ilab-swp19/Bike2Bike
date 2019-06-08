@@ -48,7 +48,7 @@ int main(void) {
                     thread_program,
                     NULL, "thread");
 
-    // Run shell
+    /* run shell */
     char line_buf[SHELL_DEFAULT_BUFSIZE];
     shell_run(_commands, line_buf, SHELL_DEFAULT_BUFSIZE);
     return 0;

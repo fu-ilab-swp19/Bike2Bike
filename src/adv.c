@@ -46,16 +46,16 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
 
     bluetil_ad_init_with_flags(&ad, buf, sizeof(buf), BLUETIL_AD_FLAGS_DEFAULT);
 
-    // prepare advertising name
+    /*  prepare advertising name */
     bluetil_ad_add_name(&ad, B2B_ADV_NAME);
 
-    // prepare our own protocol data
+    /*  prepare our own protocol data */
     uint8_t data[B2B_AD_SIZE];
-    // sender id (from  package)
+    /* sender id (from  package) */
     memcpy(data, &sender_id, sizeof(sender_id));
-    // command counter
+    /* command counter */
     memcpy(data + sizeof(sender_id), &cmd_counter, sizeof(cmd_counter));
-    // cmd
+    /* cmd */
     memcpy(data + sizeof(sender_id) + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
 
     printf("Raw data (Size: %d): ", sizeof(data));
@@ -63,8 +63,7 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
         printf("%02X ", data[i]);
     }
     printf("\n");
-    //printf("Sent: %d bytes\n", sizeof(data));
-    //printf("Data size: %d\n", sizeof(data));
+
     bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data, sizeof(data));
     ble_gap_adv_set_data(ad.buf, ad.pos);
 
