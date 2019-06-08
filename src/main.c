@@ -13,7 +13,7 @@ uint8_t _b2b_current_cmd_counter;
 int8_t _b2b_current_leader_id;
 int8_t _b2b_current_sent_cmd;
 
-char stack[THREAD_STACKSIZE_MAIN];
+char stack[THREAD_STACKSIZE_DEFAULT];
 
 static void init(void) {
     _b2b_user_type = B2B_TYPE_MEMBER;
