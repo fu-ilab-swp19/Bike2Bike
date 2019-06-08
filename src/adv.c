@@ -1,6 +1,5 @@
 #include "header/adv.h"
 
-
 static int gap_event_cb(struct ble_gap_event *event, void *arg);
 
 static void start_advertise(void)
@@ -51,24 +50,28 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
 
     /*  prepare our own protocol data */
     uint8_t data[B2B_AD_SIZE];
+    /* validation value for checking after decrypt */
+    memcpy(data, _b2b_validation_value, sizeof(_b2b_validation_value));
     /* sender id (from  package) */
-    memcpy(data, &sender_id, sizeof(sender_id));
+    memcpy(data + sizeof(_b2b_validation_value), &sender_id, sizeof(sender_id));
     /* command counter */
-    memcpy(data + sizeof(sender_id), &cmd_counter, sizeof(cmd_counter));
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id), 
+                        &cmd_counter, sizeof(cmd_counter));
     /* cmd */
-    memcpy(data + sizeof(sender_id) + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
+                        + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
 
-    printf("Raw data (Size: %d): ", sizeof(data));
-    for(size_t i = 0; i < sizeof(data); i++) {
-        printf("%02X ", data[i]);
-    }
-    printf("\n");
+    /* encrypt data */
+    uint8_t data_enc[AES_BLOCK_SIZE];
+    crypto_encrypt(data, data_enc);
 
-    bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data, sizeof(data));
+    /* add encrypted data to the ble packet as service data */
+    bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data_enc, sizeof(data_enc));
     ble_gap_adv_set_data(ad.buf, ad.pos);
 
     _b2b_current_cmd_counter = cmd_counter;
     _b2b_current_sent_cmd = cmd;
+
     start_advertise();
 
     return 0;

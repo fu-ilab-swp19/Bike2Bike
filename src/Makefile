@@ -16,13 +16,13 @@ USEMODULE += shell
 USEMODULE += bluetil_ad
 USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist
-#USEMODULE += crypto
+USEMODULE += crypto
 USEMODULE += periph_gpio_irq
 
 
 BLE_RESERVED_PACKAGE_SIZE = 65
 CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)
-#CFLAGS += -DCRYPTO_AES
+CFLAGS += -DCRYPTO_AES
 
 # Comment this out to disable code in RIOT that does safety checking
 # which is not needed in a production environment but helps in the

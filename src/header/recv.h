@@ -15,6 +15,7 @@ extern "C" {
 #include "definitions.h"
 #include "util.h"
 #include "adv.h"
+#include "crypto.h"
 
 int recv_scan_for_new_packets(void);
 void recv_init(void);

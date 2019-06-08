@@ -13,6 +13,7 @@ extern "C" {
 
 size_t util_get_own_id_length(void);
 void util_print_b2b_packet(uint8_t* data);
+void util_print_uint8_hex(uint8_t* data, size_t size, char* output);
 
 #ifdef __cplusplus
 }

@@ -15,8 +15,8 @@ size_t util_get_own_id_length(void) {
 }
 
 void util_print_b2b_packet(uint8_t* data) {
-    printf("Sender id: %d\n", data[0]);
-    printf("Command counter: %d\n", data[1]);
+    printf("Sender id: %d\n", data[0+sizeof(_b2b_validation_value)]);
+    printf("Command counter: %d\n", data[1+sizeof(_b2b_validation_value)]);
     switch(data[3]) {
         case B2B_CMD_LEFT:
             printf("Command: left\n");
@@ -38,4 +38,12 @@ void util_print_b2b_packet(uint8_t* data) {
             break;
     }
     printf("----------------------\n");
+}
+
+void util_print_uint8_hex(uint8_t data[], size_t size, char* output) {
+    printf("%s", output);
+    for(size_t i = 0; i < size; i++) {
+        printf("%02X ", data[i]);
+    }
+    printf("\n");
 }

@@ -6,7 +6,7 @@ uint8_t _b2b_aes_key[AES_KEY_SIZE];
 void crypto_init(void) {
     printf("AES Key: ");
     for(size_t i = 0; i < AES_KEY_SIZE; i++) {
-        _b2b_aes_key[i] = ((i*5)<<2)*2;
+        _b2b_aes_key[i] = ((i*5)<<2)*3;
         printf("%02X ", _b2b_aes_key[i]);
     }
     printf("\n");

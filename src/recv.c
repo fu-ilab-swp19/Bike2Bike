@@ -1,9 +1,9 @@
 #include "header/recv.h"
 
 static void recv_analyze_b2b_packet(uint8_t* data) {
-    uint8_t sender = data[0];
-    uint8_t cmd_counter = data[1];
-    uint8_t cmd = data[2];
+    uint8_t sender = data[0+sizeof(_b2b_validation_value)];
+    uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
+    uint8_t cmd = data[2+sizeof(_b2b_validation_value)];
 
     if(_b2b_user_type == B2B_TYPE_LEADER) {
         switch(cmd) {
@@ -11,7 +11,6 @@ static void recv_analyze_b2b_packet(uint8_t* data) {
                 printf("Leader received new command: stop\n");
                 break;
             case B2B_CMD_SYNC_MEMBER:
-                printf("Leader received command: sync member\n");
                 break;
         }
     }
@@ -82,9 +81,23 @@ int recv_scan_for_new_packets(void) {
         int res = bluetil_ad_find(&ad, BLE_GAP_AD_NAME, &data);  
         if(res == BLUETIL_AD_OK && data.len >= B2B_ADV_NAME_BASE_SIZE) {
             if(memcmp(data.data, B2B_ADV_NAME, B2B_ADV_NAME_BASE_SIZE) == 0) {
+
+                bluetil_ad_data_t data = {0};
                 res = bluetil_ad_find(&ad, BLE_GAP_AD_SERVICE_DATA, &data);
+
                 if(res == BLUETIL_AD_OK) {
-                    recv_analyze_b2b_packet(data.data);
+                    if(data.len >= AES_BLOCK_SIZE) {
+                         /* decrypt received data */
+                        uint8_t data_plain[AES_BLOCK_SIZE];
+                        crypto_decrypt(data.data, data_plain);
+
+                        /* check crypto validation value */
+                        if(memcmp(data_plain, _b2b_validation_value, 
+                            sizeof(_b2b_validation_value)) == 0) {
+
+                            recv_analyze_b2b_packet(data_plain);
+                        }
+                    }
                 }
             }
         }
