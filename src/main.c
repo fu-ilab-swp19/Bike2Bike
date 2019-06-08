@@ -15,16 +15,7 @@ int8_t _b2b_current_sent_cmd;
 
 char stack[THREAD_STACKSIZE_MAIN];
 
-void* thread_program(void* arg) {
-    while(true) {
-        recv_scan_for_new_packets();
-        xtimer_sleep(2);
-    }
-    (void) arg;
-    return NULL;
-}
-
-void init(void) {
+static void init(void) {
     _b2b_user_type = B2B_TYPE_MEMBER;
     _b2b_own_id = 1;
     _b2b_current_leader_id = -1;
@@ -33,6 +24,15 @@ void init(void) {
 
     //crypto_init();
     recv_init();
+}
+
+void* thread_program(void* arg) {
+    while(true) {
+        recv_scan_for_new_packets();
+        xtimer_sleep(2);
+    }
+    (void) arg;
+    return NULL;
 }
 
 int main(void) {
