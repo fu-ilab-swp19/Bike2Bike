@@ -10,14 +10,14 @@ void btn_handler (void *arg){
 	if (xtimer_usec_from_ticks (xtimer_now()) - debounce_timer > 50000) {
 		uint8_t data = *(uint8_t *) arg;
 		if (data == 1) { // left "send_left"
-    		_cmd_send_left(NULL, NULL);
+    		_cmd_send_left(0, NULL);
 		}
 		if (data == 2) { // right
-    		"send_right"
-			_cmd_send_right(NULL,NULL);
+    		//"send_right"
+			_cmd_send_right(0,NULL);
 		}
 		if (data == 3) { // set leader "sync_leader"
-    		_cmd_sync_leader(NULL,NULL);
+    		_cmd_sync_leader(0,NULL);
 			
 		}
 		if (data == 4) { // wait
