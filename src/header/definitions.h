@@ -8,12 +8,12 @@ extern "C" {
 #include <stdio.h>
 #include "crypto/ciphers.h"
 
-#define AES_KEY_SIZE                (16)
-#define AES_BLOCK_SIZE              (16)
+#define AES_KEY_SIZE                (16U)
+#define AES_BLOCK_SIZE              (16U)
 
-#define B2B_TYPE_NONE               (0x0)
-#define B2B_TYPE_MEMBER             (0x1)
-#define B2B_TYPE_LEADER             (0x2)
+#define B2B_TYPE_NONE               (0x00)
+#define B2B_TYPE_MEMBER             (0x01)
+#define B2B_TYPE_LEADER             (0x02)
 
 #define B2B_CMD_SYNC_LEADER         (0x00)
 #define B2B_CMD_SYNC_MEMBER         (0x01)
