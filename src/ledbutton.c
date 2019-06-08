@@ -66,7 +66,7 @@ void set_status_red(void) {
 	gpio_write(1,1);
 	return;
 }
-void signal_status_green(void) {
+void set_status_green(void) {
 	gpio_write(0,1);
 	return;
 }
