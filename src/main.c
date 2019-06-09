@@ -22,6 +22,7 @@ static void init(void) {
     _b2b_current_sent_cmd = -1;
     _b2b_current_cmd_counter = 0;
 
+    crypto_key_generate();
     crypto_init();
     recv_init();
 }

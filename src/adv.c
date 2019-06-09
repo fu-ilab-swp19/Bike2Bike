@@ -34,11 +34,67 @@ static int gap_event_cb(struct ble_gap_event *event, void *arg)
     return 0;
 }
 
-int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
+/* sync leader has to be unencrypted for key sharing */
+static int adv_advertise_sync_leader(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_t ad;
 
     uint8_t buf[BLE_HS_ADV_MAX_SZ];
     
+    if(ble_gap_adv_active()) {
+        ble_gap_adv_stop();
+    }
+
+    bluetil_ad_init_with_flags(&ad, buf, sizeof(buf), BLUETIL_AD_FLAGS_DEFAULT);
+
+    /*  prepare advertising name */
+    bluetil_ad_add_name(&ad, B2B_ADV_NAME);
+
+    /*  prepare our own protocol data */
+    uint8_t data[B2B_AD_SIZE + AES_KEY_SIZE];
+    /* validation value for checking after decrypt */
+    memcpy(data, _b2b_validation_value, sizeof(_b2b_validation_value));
+    /* sender id (from  package) */
+    memcpy(data + sizeof(_b2b_validation_value), &sender_id, sizeof(sender_id));
+    /* command counter */
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id), 
+                        &cmd_counter, sizeof(cmd_counter));
+    /* cmd */
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
+                        + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
+    /* aes key used for encryption */
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
+                        + sizeof(cmd_counter) + sizeof(cmd), &_b2b_aes_key, sizeof(_b2b_aes_key));
+
+    /* add encrypted data to the ble packet as service data */
+    bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data, sizeof(data));
+    ble_gap_adv_set_data(ad.buf, ad.pos);
+
+    _b2b_current_cmd_counter = cmd_counter;
+    _b2b_current_sent_cmd = cmd;
+
+    start_advertise();
+
+    return 0;
+}
+
+void adv_advertising_stop(void) {
+    if(ble_gap_adv_active()) {
+        ble_gap_adv_stop();
+        _b2b_current_sent_cmd = B2B_CMD_NONE;
+    }
+}
+int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
+    if(cmd == B2B_CMD_SYNC_LEADER) {
+        return adv_advertise_sync_leader(cmd, sender_id, cmd_counter);
+    }
+    if(cmd == B2B_CMD_NONE) { 
+        return 0;
+    }
+
+    bluetil_ad_t ad;
+
+    uint8_t buf[BLE_HS_ADV_MAX_SZ];
+
     if(ble_gap_adv_active()) {
         ble_gap_adv_stop();
     }

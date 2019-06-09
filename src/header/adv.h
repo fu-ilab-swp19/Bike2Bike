@@ -19,6 +19,7 @@ extern "C" {
 #include "crypto.h"
 
 int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter);
+void adv_advertising_stop(void);
 
 #ifdef __cplusplus
 }

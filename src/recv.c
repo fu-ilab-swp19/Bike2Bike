@@ -1,6 +1,6 @@
 #include "header/recv.h"
 
-static void recv_analyze_b2b_packet(uint8_t* data) {
+static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     uint8_t sender = data[0+sizeof(_b2b_validation_value)];
     uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
     uint8_t cmd = data[2+sizeof(_b2b_validation_value)];
@@ -18,9 +18,16 @@ static void recv_analyze_b2b_packet(uint8_t* data) {
     if(_b2b_user_type == B2B_TYPE_MEMBER && cmd_counter > _b2b_current_cmd_counter) {
         if(_b2b_current_leader_id == -1 && _b2b_current_sent_cmd == B2B_CMD_SYNC_MEMBER) {
             if(cmd == B2B_CMD_SYNC_LEADER) {
-                printf("Member received new command: sync leader\n");
-                _b2b_current_leader_id = sender;
-                printf("Leader is now: B2B-Node %d\n", sender);
+                if(data_size >= B2B_AD_SIZE + AES_KEY_SIZE) {
+                    memcpy(_b2b_aes_key, data + B2B_AD_SIZE, AES_KEY_SIZE);
+                    printf("Member received new command: sync leader\n");
+                    _b2b_current_leader_id = sender;
+                    printf("Leader is now: B2B-Node %d\n", sender);
+                    crypto_init();
+                    util_print_uint8_hex(_b2b_aes_key, sizeof(_b2b_aes_key), 
+                                    "Session AES128 key: ");
+                    adv_advertising_stop();
+                }
             }
         } else {
             if(sender == _b2b_current_leader_id){
@@ -71,7 +78,6 @@ int recv_scan_for_new_packets(void) {
     nimble_scanner_start();
     xtimer_sleep(2);
     nimble_scanner_stop();
-
     nimble_scanlist_entry_t* e = NULL;
 
     e = nimble_scanlist_get_next(e);
@@ -87,16 +93,29 @@ int recv_scan_for_new_packets(void) {
 
                 if(res == BLUETIL_AD_OK) {
                     if(data.len >= AES_BLOCK_SIZE) {
-                         /* decrypt received data */
-                        uint8_t data_plain[AES_BLOCK_SIZE];
-                        crypto_decrypt(data.data, data_plain);
+                        /* leader id is set -> expect encrypted data*/
+                        if(_b2b_current_leader_id != -1) {
 
-                        /* check crypto validation value */
-                        if(memcmp(data_plain, _b2b_validation_value, 
-                            sizeof(_b2b_validation_value)) == 0) {
+                            /* decrypt received data */
+                            uint8_t data_plain[AES_BLOCK_SIZE];
+                            crypto_decrypt(data.data, data_plain);
 
-                            recv_analyze_b2b_packet(data_plain);
+                            /* check crypto validation value */
+                            if(memcmp(data_plain, _b2b_validation_value, 
+                                sizeof(_b2b_validation_value)) == 0) {
+                                
+                                recv_analyze_b2b_packet(data_plain, sizeof(data_plain));
+                            }
+                        } else { /* leader is not set -> expect plain data */
+                            /* check crypto validation value */
+
+                            if(memcmp(data.data, _b2b_validation_value, 
+                                sizeof(_b2b_validation_value)) == 0) {
+                                
+                                recv_analyze_b2b_packet(data.data, data.len);
+                            }
                         }
+                        
                     }
                 }
             }

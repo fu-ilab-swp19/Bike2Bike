@@ -22,6 +22,7 @@ extern "C" {
 #define B2B_CMD_RIGHT               (0x03)
 #define B2B_CMD_STOP                (0x04)
 #define B2B_CMD_NO_CMD              (0x05)
+#define B2B_CMD_NONE                (0x06)
 
 #define B2B_AD_SIZE                 (0x05)
 #define B2B_ADV_NAME_BASE_SIZE      (0x03)

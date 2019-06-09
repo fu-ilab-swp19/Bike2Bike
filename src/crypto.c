@@ -4,15 +4,15 @@ cipher_t _b2b_cipher;
 uint8_t _b2b_aes_key[AES_KEY_SIZE];
 
 void crypto_init(void) {
-    printf("AES Key: ");
-    for(size_t i = 0; i < AES_KEY_SIZE; i++) {
-        _b2b_aes_key[i] = ((i*5)<<2)*3;
-        printf("%02X ", _b2b_aes_key[i]);
-    }
-    printf("\n");
     if(cipher_init(&_b2b_cipher, CIPHER_AES_128, _b2b_aes_key, AES_KEY_SIZE) < 0) {
         perror("Crypto init failed!\n");
         exit(-1);
+    }
+}
+
+void crypto_key_generate(void) {
+    for(size_t i = 0; i < AES_KEY_SIZE; i++) {
+        _b2b_aes_key[i] = ((i*5)<<2)*3;
     }
 }
 
