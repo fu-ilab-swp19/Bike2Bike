@@ -42,9 +42,30 @@ void btn_handler (void *arg){
 		}
 		if (data == 4) { // wait
 		
-			_cmd_send_stop(0,NULL);
 		
-			sync_leader(0,NULL);
+			if (gpio_read(3) == 0 && gpio_read(5) == 0) {
+				_cmd_send_stop(0,NULL);
+				
+			} else if (gpio_read(3) == 0 && gpio_read(5) == 1) {
+				_cmd_sync_member(0,NULL);
+				gpio_write(3,0);
+				gpio_write(5,0);
+				
+			} else if (gpio_read(3) == 1 && gpio_read(5) == 0) {
+				_cmd_sync_leader(0,NULL);
+				gpio_write(3,0);
+				gpio_write(5,0);
+				
+			} else if (gpio_read(3) == 1 && gpio_read(5) == 1) {
+				_cmd_set_leader(0,NULL);
+				gpio_write(3,0);
+				gpio_write(5,0);
+				
+			} 
+		
+			
+		
+			//
     		//gpio_write(4,1);
 		//	gpio_write(5,1);
 		}
