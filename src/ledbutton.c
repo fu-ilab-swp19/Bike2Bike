@@ -20,15 +20,47 @@ void btn_handler (void *arg){
     		//"send_right"
 			_cmd_send_right(0,NULL);
 		}
-		if (data == 3) { // set leader "sync_leader"
-    		set_leader(0,NULL);
+		if (data == 3) { // set leader "sync_leader" 3 5
+    		if (gpio_read(3) == 0 && gpio_read(5) == 0) {
+					gpio_write(3,0);
+					gpio_write(5,1);
+				
+			} else if (gpio_read(3) == 0 && gpio_read(5) == 1) {
+				gpio_write(3,1);
+				gpio_write(5,0);
+				
+			} else if (gpio_read(3) == 1 && gpio_read(5) == 0) {
+						gpio_write(3,1);
+						gpio_write(5,1);
+				
+			} else if (gpio_read(3) == 1 && gpio_read(5) == 1) {
+						gpio_write(3,0);
+						gpio_write(5,0);
+				
+			} 
 			
 		}
 		if (data == 4) { // wait
+		
+			_cmd_send_stop(0,NULL);
+		
 			sync_leader(0,NULL);
     		//gpio_write(4,1);
 		//	gpio_write(5,1);
 		}
+		/*
+		int _cmd_set_id(int argc, char** argv);
+int _cmd_set_leader(int argc, char** argv);
+int _cmd_set_cmd_counter(int argc, char** argv);
+
+int _cmd_send_left(int argc, char** argv);
+int _cmd_send_right(int argc, char** argv);
+int _cmd_send_stop(int argc, char** argv);
+int _cmd_send_no_cmd(int argc, char** argv);
+
+int _cmd_sync_leader(int argc, char** argv);
+int _cmd_sync_member(int argc, char** argv);
+		*/
 	debounce_timer = xtimer_usec_from_ticks(xtimer_now ());
 	}
 	return ;
