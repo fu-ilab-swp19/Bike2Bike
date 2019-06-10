@@ -48,7 +48,7 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                     case B2B_CMD_LEFT:
                         printf("Member received new command: left\n");
                         adv_advertise_packet(cmd, sender, cmd_counter);
-						signal_left_green;
+						signal_left_green();
                         printf("Sending new command: left\n");
                         break;
                     case B2B_CMD_RIGHT:
