@@ -2,13 +2,14 @@
 #include "header/recv.h"
 #include "header/adv.h"
 #include "header/crypto.h"
-
+#include "header/definitions.h"
 
 uint32_t debounce_timer = 0;
 uint8_t data1 = 1; // left
 uint8_t data2 = 2; // right
 uint8_t data3 = 3; // set_leader
 uint8_t data4 = 4; 
+char stack2[THREAD_STACKSIZE_DEFAULT];
 
 void btn_handler (void *arg){
 	if (xtimer_usec_from_ticks (xtimer_now()) - debounce_timer > 50000) {
@@ -62,26 +63,7 @@ void btn_handler (void *arg){
 				gpio_write(5,0);
 				
 			} 
-		
-			
-		
-			//
-    		//gpio_write(4,1);
-		//	gpio_write(5,1);
 		}
-		/*
-		int _cmd_set_id(int argc, char** argv);
-int _cmd_set_leader(int argc, char** argv);
-int _cmd_set_cmd_counter(int argc, char** argv);
-
-int _cmd_send_left(int argc, char** argv);
-int _cmd_send_right(int argc, char** argv);
-int _cmd_send_stop(int argc, char** argv);
-int _cmd_send_no_cmd(int argc, char** argv);
-
-int _cmd_sync_leader(int argc, char** argv);
-int _cmd_sync_member(int argc, char** argv);
-		*/
 	debounce_timer = xtimer_usec_from_ticks(xtimer_now ());
 	}
 	return ;
@@ -89,8 +71,8 @@ int _cmd_sync_member(int argc, char** argv);
 
 
 
-void* thread_status(int pin) {
-    
+void* thread_status(void *arg) {
+    int pin = *(int *) arg;
     gpio_write(pin,1);
 	xtimer_sleep(5);
 	gpio_write(pin,0);
@@ -102,11 +84,11 @@ void* thread_status(int pin) {
 
 
 void signal_5sec(int pin) {
-	thread_create(stack, sizeof(stack),
+	thread_create(stack2, sizeof(stack2),
 					THREAD_PRIORITY_MAIN - 1,
                     THREAD_CREATE_STACKTEST,
                     thread_status,
-                    pin, "thread");
+                    &pin, "thread");
 	return;
 }
 
