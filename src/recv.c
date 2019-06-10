@@ -10,7 +10,6 @@ static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd){
 	}
 }
 
-
 static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     uint8_t sender = data[0+sizeof(_b2b_validation_value)];
     uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
@@ -38,8 +37,9 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                     util_print_uint8_hex(_b2b_aes_key, sizeof(_b2b_aes_key), 
                                     "Session AES128 key: ");
                     adv_advertising_stop();
-                    signal_status_green();
+                    set_status_green();
                 }
+				
 				
             }
         } else {
@@ -48,11 +48,13 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                     case B2B_CMD_LEFT:
                         printf("Member received new command: left\n");
                         adv_advertise_packet(cmd, sender, cmd_counter);
+						signal_left_green;
                         printf("Sending new command: left\n");
                         break;
                     case B2B_CMD_RIGHT:
                         printf("Member received new command: right\n");
                         adv_advertise_packet(cmd, sender, cmd_counter);
+						signal_right_green();
                         printf("Sending new command: right\n");
                         break;
                     case B2B_CMD_STOP:

@@ -23,20 +23,20 @@ void btn_handler (void *arg){
 		}
 		if (data == 3) { // set leader "sync_leader" 3 5
     		if (gpio_read(3) == 0 && gpio_read(5) == 0) {
-					gpio_write(3,0);
-					gpio_write(5,1);
+				gpio_write(3,0);
+				gpio_write(5,1);
 				
 			} else if (gpio_read(3) == 0 && gpio_read(5) == 1) {
 				gpio_write(3,1);
 				gpio_write(5,0);
 				
 			} else if (gpio_read(3) == 1 && gpio_read(5) == 0) {
-						gpio_write(3,1);
-						gpio_write(5,1);
+				gpio_write(3,1);
+				gpio_write(5,1);
 				
 			} else if (gpio_read(3) == 1 && gpio_read(5) == 1) {
-						gpio_write(3,0);
-						gpio_write(5,0);
+				gpio_write(3,0);
+				gpio_write(5,0);
 				
 			} 
 			
@@ -70,7 +70,7 @@ void btn_handler (void *arg){
 }
 
 
-
+/*
 void* thread_status(void *arg) {
     int pin = *(int *) arg;
     gpio_write(pin,1);
@@ -80,15 +80,18 @@ void* thread_status(void *arg) {
     
     //(void) arg;
     return NULL;
-}
+}*/
 
 
 void signal_5sec(int pin) {
-	thread_create(stack2, sizeof(stack2),
+	/*thread_create(stack2, sizeof(stack2),
 					THREAD_PRIORITY_MAIN - 1,
                     THREAD_CREATE_STACKTEST,
                     thread_status,
-                    &pin, "thread");
+                    &pin, "thread");*/
+	gpio_write(pin,1);
+	xtimer_sleep(5);
+	gpio_write(pin,0);
 	return;
 }
 
