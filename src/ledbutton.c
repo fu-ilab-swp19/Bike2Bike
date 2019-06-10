@@ -88,10 +88,25 @@ int _cmd_sync_member(int argc, char** argv);
 }
 
 
-void signal_5sec(int pin) {
-	gpio_write(pin,1);
+
+void* thread_status(int pin) {
+    
+    gpio_write(pin,1);
 	xtimer_sleep(5);
 	gpio_write(pin,0);
+   
+    
+    //(void) arg;
+    return NULL;
+}
+
+
+void signal_5sec(int pin) {
+	thread_create(stack, sizeof(stack),
+					THREAD_PRIORITY_MAIN - 1,
+                    THREAD_CREATE_STACKTEST,
+                    thread_status,
+                    pin, "thread");
 	return;
 }
 
