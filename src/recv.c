@@ -1,5 +1,16 @@
 #include "header/recv.h"
 
+static int check_cmd_counter(int send_cmd, int curr_cmd){
+	if(curr_cmd >= 240 && send_cmd >= 1 && send_cmd <= 16){
+		return 1;
+	}else if(send_cmd > curr_cmd){
+		return 1;	
+	}else{
+		return 0;
+	}
+}
+
+
 static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     uint8_t sender = data[0+sizeof(_b2b_validation_value)];
     uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
@@ -15,7 +26,7 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
         }
     }
 
-    if(_b2b_user_type == B2B_TYPE_MEMBER && cmd_counter > _b2b_current_cmd_counter) {
+    if(_b2b_user_type == B2B_TYPE_MEMBER && check_cmd_counter(cmd_counter, _b2b_current_cmd_counter)){
         if(_b2b_current_leader_id == -1 && _b2b_current_sent_cmd == B2B_CMD_SYNC_MEMBER) {
             if(cmd == B2B_CMD_SYNC_LEADER) {
                 if(data_size >= B2B_AD_SIZE + AES_KEY_SIZE) {
