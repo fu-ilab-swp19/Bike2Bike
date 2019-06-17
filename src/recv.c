@@ -1,9 +1,9 @@
 #include "header/recv.h"
 
-static int check_cmd_counter(int send_cmd, int curr_cmd){
+static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd){
 	if(curr_cmd >= 240 && send_cmd >= 1 && send_cmd <= 16){
 		return 1;
-	}else if(send_cmd > curr_cmd){
+	}else if(send_cmd > curr_cmd && send_cmd + 32 <= curr_cmd){
 		return 1;	
 	}else{
 		return 0;
