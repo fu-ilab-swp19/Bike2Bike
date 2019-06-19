@@ -83,7 +83,7 @@ void adv_advertising_stop(void) {
         _b2b_current_sent_cmd = B2B_CMD_NONE;
     }
 }
-int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
+int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter, uint8_t cmd_counter_emerg) {
     if(cmd == B2B_CMD_SYNC_LEADER) {
         return adv_advertise_sync_leader(cmd, sender_id, cmd_counter);
     }
@@ -115,7 +115,10 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
                         &cmd_counter, sizeof(cmd_counter));
     /* cmd */
     memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
-                        + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
+                        + sizeof(cmd_counter), &cmd, sizeof(cmd));
+    /*command counter emergency */
+    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
+                        + sizeof(cmd_counter) + sizeof(cmd), &cmd_counter_emerg, sizeof(cmd_counter_emerg));                     
 
     /* encrypt data */
     uint8_t data_enc[AES_BLOCK_SIZE];

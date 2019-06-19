@@ -24,7 +24,7 @@ extern "C" {
 #define B2B_CMD_NO_CMD              (0x05)
 #define B2B_CMD_NONE                (0x06)
 
-#define B2B_AD_SIZE                 (0x05)
+#define B2B_AD_SIZE                 (0x07)
 #define B2B_ADV_NAME_BASE_SIZE      (0x03)
 
 extern const char   B2B_ADV_NAME[4];
@@ -37,6 +37,7 @@ extern uint8_t       _b2b_user_type;
 extern int8_t        _b2b_current_leader_id;
 extern int8_t        _b2b_current_sent_cmd;
 extern uint8_t       _b2b_current_cmd_counter;
+extern uint8_t       _b2b_current_emerg_counter;
 extern uint8_t       _b2b_validation_value[2];
 
 #ifdef __cplusplus

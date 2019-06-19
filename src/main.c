@@ -11,6 +11,7 @@ uint8_t _b2b_user_type;
 uint8_t _b2b_own_id;
 
 uint8_t _b2b_current_cmd_counter;
+uint8_t _b2b_current_emerg_counter;
 int8_t _b2b_current_leader_id;
 int8_t _b2b_current_sent_cmd;
 
@@ -22,6 +23,9 @@ static void init(void) {
     _b2b_current_leader_id = -1;
     _b2b_current_sent_cmd = -1;
     _b2b_current_cmd_counter = 0;
+    _b2b_current_emerg_counter = 0;
+
+    crypto_key_generate();
     
 	led_init();
     crypto_init();
