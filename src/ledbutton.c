@@ -5,23 +5,22 @@
 #include "header/definitions.h"
 
 uint32_t debounce_timer = 0;
-uint8_t data1 = 1; // left
-uint8_t data2 = 2; // right
-uint8_t data3 = 3; // set_leader
+uint8_t data1 = 1; /*  left */
+uint8_t data2 = 2; /* right */
+uint8_t data3 = 3;  /* set_leader */
 uint8_t data4 = 4; 
-char stack2[THREAD_STACKSIZE_DEFAULT];
 
 void btn_handler (void *arg){
 	if (xtimer_usec_from_ticks (xtimer_now()) - debounce_timer > 50000) {
 		uint8_t data = *(uint8_t *) arg;
-		if (data == 1) { // left "send_left"
-    		_cmd_send_left(0, NULL);
+		if (data == 1) { /*  left "send_left" */
+		    _cmd_send_left(0, NULL);
 		}
-		if (data == 2) { // right
-    		//"send_right"
+		if (data == 2) { /*  right */
+    		/* "send_right" */
 			_cmd_send_right(0,NULL);
 		}
-		if (data == 3) { // set leader "sync_leader" 3 5
+		if (data == 3) { /* set leader "sync_leader" 3 5 */
     		if (gpio_read(3) == 0 && gpio_read(5) == 0) {
 				gpio_write(3,0);
 				gpio_write(5,1);
@@ -35,13 +34,12 @@ void btn_handler (void *arg){
 				gpio_write(5,1);
 				
 			} else if (gpio_read(3) == 1 && gpio_read(5) == 1) {
-				gpio_write(3,0);
 				gpio_write(5,0);
 				
 			} 
 			
 		}
-		if (data == 4) { // wait
+		if (data == 4) {  /* wait */
 		
 		
 			if (gpio_read(3) == 0 && gpio_read(5) == 0) {
@@ -69,32 +67,12 @@ void btn_handler (void *arg){
 	return ;
 }
 
-
-/*
-void* thread_status(void *arg) {
-    int pin = *(int *) arg;
-    gpio_write(pin,1);
-	xtimer_sleep(5);
-	gpio_write(pin,0);
-   
-    
-    //(void) arg;
-    return NULL;
-}*/
-
-
 void signal_5sec(int pin) {
-	/*thread_create(stack2, sizeof(stack2),
-					THREAD_PRIORITY_MAIN - 1,
-                    THREAD_CREATE_STACKTEST,
-                    thread_status,
-                    &pin, "thread");*/
 	gpio_write(pin,1);
 	xtimer_sleep(5);
 	gpio_write(pin,0);
 	return;
 }
-
 
 void signal_left_green(void) {
 	signal_5sec(2);
@@ -136,19 +114,17 @@ void reset_status(void) {
 
 
 void led_init(void) {
-	// Init output Pins
+	/* Init output Pins */
+    gpio_init(0,GPIO_OUT);  /* status green */
+    gpio_init(1,GPIO_OUT); /* status red */
 
-    gpio_init(0,GPIO_OUT); // status green
-    gpio_init(1,GPIO_OUT); //status red
-
-    gpio_init(2,GPIO_OUT); // left green
-    gpio_init(3,GPIO_OUT); // left red
+    gpio_init(2,GPIO_OUT); /*  left green */
+    gpio_init(3,GPIO_OUT); /*  left red */
 	
-    gpio_init(4,GPIO_OUT); // right green
-    gpio_init(5,GPIO_OUT); // right red
+    gpio_init(4,GPIO_OUT);  /* right green */
+    gpio_init(5,GPIO_OUT); /*  right red */
 	
-	// set all leds to off
-	
+	/* set all leds to off */
 	gpio_write(0,0);
 	gpio_write(1,0);
 	gpio_write(2,0);
@@ -156,9 +132,7 @@ void led_init(void) {
 	gpio_write(4,0);
 	gpio_write(5,0);
 	
-	// init button handler
-	
-
+	/*  init button handler */
 	gpio_init_int(7,GPIO_IN,GPIO_FALLING,btn_handler,&data1);
 	
 	gpio_init_int(8,GPIO_IN,GPIO_FALLING,btn_handler,&data2);
