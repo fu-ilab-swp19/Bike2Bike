@@ -1,14 +1,6 @@
 #include "header/recv.h"
 
-static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd){
-	if(curr_cmd >= 240 && send_cmd >= 1 && send_cmd <= 16){
-		return 1;
-	}else if(send_cmd > curr_cmd && send_cmd <= curr_cmd + 32){
-		return 1;	
-	}else{
-		return 0;
-	}
-}
+static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd);
 
 static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     uint8_t sender = data[0+sizeof(_b2b_validation_value)];
@@ -54,7 +46,7 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                     case B2B_CMD_RIGHT:
                         printf("Member received new command: right\n");
                         adv_advertise_packet(cmd, sender, cmd_counter);
-						signal_right_green();
+						/* signal_right_green(); */
                         printf("Sending new command: right\n");
                         break;
                     case B2B_CMD_STOP:
@@ -73,6 +65,81 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     }
 } 
 
+int recv_scan_for_new_packets(void) {
+    nimble_scanner_start();
+    xtimer_sleep(2);
+    nimble_scanner_stop();
+    return 0;
+}
+
+
+static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd) {
+	if(curr_cmd >= 240 && send_cmd >= 1 && send_cmd <= 16) {
+		return 1;
+	} else if(send_cmd > curr_cmd && send_cmd <= curr_cmd + 32) {
+		return 1;	
+	} else {
+		return 0;
+	}
+}
+
+static void nimble_scanner_packet_received(const ble_addr_t *addr, int8_t rssi,
+                            const uint8_t *ad, size_t len) {
+
+    assert(addr);
+    assert(len <= BLE_ADV_PDU_LEN);
+
+    (void) addr;
+    (void) rssi;
+
+    /* prepare bluetil ad */
+    uint8_t tmp_ad[len];
+    memcpy(tmp_ad, ad, len);
+
+    bluetil_ad_t bluetil_ad = BLUETIL_AD_INIT(tmp_ad, len, len);
+    bluetil_ad_data_t data;
+
+
+    /* retrieve advertised name (has to be B2B) */
+    int res = bluetil_ad_find(&bluetil_ad, BLE_GAP_AD_NAME, &data); 
+
+    if(res == BLUETIL_AD_OK && data.len >= B2B_ADV_NAME_BASE_SIZE) {
+        if(memcmp(data.data, B2B_ADV_NAME, B2B_ADV_NAME_BASE_SIZE) == 0) {
+
+            bluetil_ad_data_t data = {0};
+            res = bluetil_ad_find(&bluetil_ad, BLE_GAP_AD_SERVICE_DATA, &data);
+            if(res == BLUETIL_AD_OK) {
+                if(data.len >= AES_BLOCK_SIZE) {
+                    /* leader id is set -> expect encrypted data*/
+                    if(_b2b_current_leader_id != -1) {
+
+                        /* decrypt received data */
+                        uint8_t data_plain[AES_BLOCK_SIZE];
+                        crypto_decrypt(data.data, data_plain);
+
+                        /* check crypto validation value */
+                        if(memcmp(data_plain, _b2b_validation_value, 
+                            sizeof(_b2b_validation_value)) == 0) {
+                            recv_analyze_b2b_packet(data_plain, sizeof(data_plain));
+                        }
+                    } else { 
+                        
+                        /* leader is not set -> expect plain data */
+                        /* check crypto validation value */
+
+                        if(memcmp(data.data, _b2b_validation_value, 
+                            sizeof(_b2b_validation_value)) == 0) {
+                            
+                            recv_analyze_b2b_packet(data.data, data.len);
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
 void recv_init(void) {
         struct ble_gap_disc_params scan_params = {
         .itvl = BLE_GAP_LIM_DISC_SCAN_INT,
@@ -80,63 +147,8 @@ void recv_init(void) {
         .filter_policy = 0,                         
         .limited = 0,                               
         .passive = 0,                               
-        . filter_duplicates = 0,                    
+        . filter_duplicates = 1,                    
     };  
     
-    nimble_scanlist_init();
-    nimble_scanner_init(&scan_params, nimble_scanlist_update);
+    nimble_scanner_init(&scan_params, nimble_scanner_packet_received);
 }
-
-int recv_scan_for_new_packets(void) {
-    nimble_scanlist_clear();
-
-    nimble_scanner_start();
-    xtimer_sleep(2);
-    nimble_scanner_stop();
-    nimble_scanlist_entry_t* e = NULL;
-
-    e = nimble_scanlist_get_next(e);
-    while(e) {
-        bluetil_ad_t ad = BLUETIL_AD_INIT(e->ad, e->ad_len, e->ad_len);
-        bluetil_ad_data_t data;
-        int res = bluetil_ad_find(&ad, BLE_GAP_AD_NAME, &data);  
-        if(res == BLUETIL_AD_OK && data.len >= B2B_ADV_NAME_BASE_SIZE) {
-            if(memcmp(data.data, B2B_ADV_NAME, B2B_ADV_NAME_BASE_SIZE) == 0) {
-
-                bluetil_ad_data_t data = {0};
-                res = bluetil_ad_find(&ad, BLE_GAP_AD_SERVICE_DATA, &data);
-
-                if(res == BLUETIL_AD_OK) {
-                    if(data.len >= AES_BLOCK_SIZE) {
-                        /* leader id is set -> expect encrypted data*/
-                        if(_b2b_current_leader_id != -1) {
-
-                            /* decrypt received data */
-                            uint8_t data_plain[AES_BLOCK_SIZE];
-                            crypto_decrypt(data.data, data_plain);
-
-                            /* check crypto validation value */
-                            if(memcmp(data_plain, _b2b_validation_value, 
-                                sizeof(_b2b_validation_value)) == 0) {
-                                
-                                recv_analyze_b2b_packet(data_plain, sizeof(data_plain));
-                            }
-                        } else { /* leader is not set -> expect plain data */
-                            /* check crypto validation value */
-
-                            if(memcmp(data.data, _b2b_validation_value, 
-                                sizeof(_b2b_validation_value)) == 0) {
-                                
-                                recv_analyze_b2b_packet(data.data, data.len);
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }
-        e = nimble_scanlist_get_next(e);
-    }   
-    return 0;
-}
-
