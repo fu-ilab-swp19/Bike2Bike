@@ -2,11 +2,83 @@
 
 static int recv_check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd);
 
+static void recv_analyze_b2b_leader_packet(uint8_t* data, size_t data_size){
+    uint8_t sender = data[0+sizeof(_b2b_validation_value)];
+    uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
+    uint8_t cmd = data[2+sizeof(_b2b_validation_value)];
+
+    if(recv_check_cmd_counter(cmd_counter, _b2b_current_cmd_counter)){
+        if(_b2b_current_leader_id == -1 && _b2b_current_sent_cmd == B2B_CMD_SYNC_MEMBER) {
+            if(cmd == B2B_CMD_SYNC_LEADER) {
+                if(data_size >= B2B_AD_SIZE + AES_KEY_SIZE) {
+                    memcpy(_b2b_aes_key, data + B2B_AD_SIZE, AES_KEY_SIZE);
+                    printf("Member received new command: sync leader\n");
+                    _b2b_current_leader_id = sender;
+                    printf("Leader is now: B2B-Node %d\n", sender);
+                    crypto_init();
+                    util_print_uint8_hex(_b2b_aes_key, sizeof(_b2b_aes_key), 
+                                    "Session AES128 key: ");
+                    adv_advertising_stop();
+                }
+            }
+        } else {
+            if(sender == _b2b_current_leader_id){
+                switch(cmd) {
+                    case B2B_CMD_LEFT:
+                        printf("Member received new command: left\n");
+                        adv_advertise_packet(sender);
+                        printf("Sending new command: left\n");
+                        break;
+                    case B2B_CMD_RIGHT:
+                        printf("Member received new command: right\n");
+                        adv_advertise_packet(sender);
+                        printf("Sending new command: right\n");
+                        break;
+                    case B2B_CMD_STOP:
+                        printf("Member received new command: stop\n");
+                        adv_advertise_packet(sender);
+                        printf("Sending new command: stop\n");
+                        break;
+                    case B2B_CMD_NO_CMD:
+                        printf("Member received new command: no command\n");
+                        adv_advertise_packet(sender);
+                        printf("Sending new command: no command\n");
+                        break;
+                }
+            }
+        } 
+    }
+    
+
+}
+
+static void recv_analyze_b2b_member_packet(uint8_t* data, size_t data_size){
+    uint8_t sender = data[0+sizeof(_b2b_validation_value)];
+    uint8_t cmd_counter_emerg = data[3+sizeof(_b2b_validation_value)];
+    uint8_t emerg_cmd = data[4+sizeof(_b2b_validation_value)];
+
+    if(_b2b_user_type == B2B_TYPE_LEADER) {
+        if(emerg_cmd == B2B_CMD_STOP && recv_check_cmd_counter(cmd_counter_emerg, _b2b_current_emerg_counter)){
+            printf("Leader received new command: stop\n");            
+        }
+    }
+
+    else{
+        if(emerg_cmd == B2B_CMD_STOP && recv_check_cmd_counter(cmd_counter_emerg, _b2b_current_emerg_counter)){
+            printf("Member received new command: Emergency stop\n");
+            adv_advertise_packet(sender);
+            printf("Sending new command: Emergency stop\n");
+        }
+    }
+
+}
+
 static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
     uint8_t sender = data[0+sizeof(_b2b_validation_value)];
     uint8_t cmd_counter = data[1+sizeof(_b2b_validation_value)];
     uint8_t cmd = data[2+sizeof(_b2b_validation_value)];
     uint8_t cmd_counter_emerg = data[3+sizeof(_b2b_validation_value)];
+    uint8_t emerg_cmd = data[4+sizeof(_b2b_validation_value)];
 
     if(_b2b_user_type == B2B_TYPE_LEADER) {
         switch(cmd) {
@@ -42,22 +114,22 @@ static void recv_analyze_b2b_packet(uint8_t* data, size_t data_size) {
                 switch(cmd) {
                     case B2B_CMD_LEFT:
                         printf("Member received new command: left\n");
-                        adv_advertise_packet(cmd, sender, cmd_counter, cmd_counter_emerg);
+                        adv_advertise_packet(sender);
                         printf("Sending new command: left\n");
                         break;
                     case B2B_CMD_RIGHT:
                         printf("Member received new command: right\n");
-                        adv_advertise_packet(cmd, sender, cmd_counter, cmd_counter_emerg);
+                        adv_advertise_packet(sender);
                         printf("Sending new command: right\n");
                         break;
                     case B2B_CMD_STOP:
                         printf("Member received new command: stop\n");
-                        adv_advertise_packet(cmd, sender, cmd_counter, cmd_counter_emerg);
+                        adv_advertise_packet(sender);
                         printf("Sending new command: stop\n");
                         break;
                     case B2B_CMD_NO_CMD:
                         printf("Member received new command: no command\n");
-                        adv_advertise_packet(cmd, sender, cmd_counter, cmd_counter_emerg);
+                        adv_advertise_packet(sender);
                         printf("Sending new command: no command\n");
                         break;
                 }

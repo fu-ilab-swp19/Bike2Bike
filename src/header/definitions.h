@@ -37,6 +37,7 @@ extern uint8_t       _b2b_user_type;
 extern int8_t        _b2b_current_leader_id;
 extern int8_t        _b2b_current_sent_cmd;
 extern uint8_t       _b2b_current_cmd_counter;
+extern uint8_t       _b2b_current_emerg_cmd;
 extern uint8_t       _b2b_current_emerg_counter;
 extern uint8_t       _b2b_validation_value[2];
 
