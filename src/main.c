@@ -2,6 +2,7 @@
 #include "header/recv.h"
 #include "header/adv.h"
 #include "header/crypto.h"
+#include "header/ledbutton.h"
 
 uint8_t _b2b_validation_value[] = { 0xAC, 0xDC };
 const char   B2B_ADV_NAME[] = "B2B";
@@ -21,8 +22,8 @@ static void init(void) {
     _b2b_current_leader_id = -1;
     _b2b_current_sent_cmd = -1;
     _b2b_current_cmd_counter = 0;
-
-    crypto_key_generate();
+    
+	led_init();
     crypto_init();
     recv_init();
 }
