@@ -23,9 +23,7 @@ static void init(void);
 
 int main(void) {
     init();
-
-    puts("Init completed\n");
-    puts("Bike2Bike program started");
+    printf("Bike2Bike version %s\n", B2B_VERSION);
 
     thread_create(stack, sizeof(stack),
                     THREAD_PRIORITY_MAIN - 1,
@@ -52,6 +50,7 @@ static void init(void) {
     _b2b_current_sent_cmd_emerg = B2B_CMD_NONE;
     _b2b_current_cmd_counter = 0;
     _b2b_current_cmd_emerg_counter = 0;
+    printf("Init completed\n");
 }
 
 static void* thread_program(void* arg) {

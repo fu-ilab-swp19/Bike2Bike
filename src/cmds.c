@@ -107,3 +107,10 @@ int _cmd_sync_member(int argc, char** argv) {
     (void) argv;
     return 0;
 }
+
+int _cmd_b2b_version(int argc, char** argv) {
+    (void) argc;
+    (void) argv;
+    printf("Bike2Bike version %s\n", B2B_VERSION);
+    return 0;
+}
