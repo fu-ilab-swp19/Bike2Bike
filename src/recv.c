@@ -46,15 +46,17 @@ static void process_b2b_packet_member(b2b_packet* packet) {
         if(check_cmd_counter(packet->cmd_counter, _b2b_current_cmd_counter)) {
             _b2b_current_sent_cmd = packet->cmd;
             _b2b_current_cmd_counter = packet->cmd_counter;
+            feedback_cmd_changed();
+            adv_advertise_start();
         }
 
         /* process emergency command */
         if(check_cmd_counter(packet->cmd_emerg_counter, _b2b_current_cmd_emerg_counter)) {
             _b2b_current_sent_cmd_emerg = packet->cmd_emerg;
             _b2b_current_cmd_emerg_counter= packet->cmd_emerg_counter;
+            printf("Received: %d\n", packet->cmd_emerg);
+            adv_advertise_start();
         }
-        adv_advertise_start();
-        feedback_cmd_changed();
     }
 }
 
