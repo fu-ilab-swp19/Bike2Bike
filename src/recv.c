@@ -12,8 +12,8 @@ static void process_b2b_packet_member(b2b_packet* packet);
 static void process_b2b_packet_leader(b2b_packet* packet) {
     if(check_cmd_counter(packet->cmd_emerg_counter, _b2b_current_cmd_emerg_counter)) {
         if(packet->cmd_emerg == B2B_CMD_STOP) {
-            _b2b_current_cmd_counter = B2B_CMD_NONE;
-            _b2b_current_cmd_emerg_counter = packet->cmd_emerg_counter++;
+            _b2b_current_sent_cmd_emerg = B2B_CMD_NONE;
+            _b2b_current_cmd_emerg_counter = packet->cmd_emerg_counter+1;
             feedback_cmd_stop();
             adv_advertise_start();
         }
@@ -54,7 +54,6 @@ static void process_b2b_packet_member(b2b_packet* packet) {
         if(check_cmd_counter(packet->cmd_emerg_counter, _b2b_current_cmd_emerg_counter)) {
             _b2b_current_sent_cmd_emerg = packet->cmd_emerg;
             _b2b_current_cmd_emerg_counter= packet->cmd_emerg_counter;
-            printf("Received: %d\n", packet->cmd_emerg);
             adv_advertise_start();
         }
     }
@@ -78,8 +77,6 @@ static void prepare_b2b_packet(b2b_packet* packet, uint8_t* data, uint8_t len) {
         }  
         return;
 }
-
-
 
 static int check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd) {
 	if(curr_cmd >= 240 && send_cmd >= 1 && send_cmd <= 16) {

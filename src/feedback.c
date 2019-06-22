@@ -11,27 +11,21 @@ void feedback_cmd_changed(void) {
         case(B2B_CMD_STOP):
             feedback_cmd_stop();
             break;
-        case(B2B_CMD_SYNC_LEADER):
-            feedback_cmd_sync_leader();
-            break;
-        case(B2B_CMD_SYNC_MEMBER):
-            feedback_cmd_sync_member();
-            break;
         default:
             break;
     }
 }
 
 void feedback_cmd_left(void) {
-    printf("Left\n");
+    printf("New command received: Left\n");
 }
 
 void feedback_cmd_right(void) {
-    printf("Right\n");
+    printf("New command received: Right\n");
 }
 
 void feedback_cmd_stop(void) {
-    printf("Stop\n");
+    printf("New command received: Stop\n");
 }
 
 void feedback_cmd_sync_member(void) {
@@ -47,5 +41,5 @@ void feedback_cmd_sync_leader(void) {
 }
 
 void feedback_cmd_no_cmd(void) {
-    printf("No cmd\n");
+    printf("New command received: No cmd\n");
 }

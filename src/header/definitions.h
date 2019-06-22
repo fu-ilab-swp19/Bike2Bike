@@ -11,7 +11,7 @@ extern "C" {
 #define AES_KEY_SIZE                (16U)
 #define AES_BLOCK_SIZE              (16U)
 
-#define B2B_VERSION                 "0.7"
+#define B2B_VERSION                 "0.72"
 #define B2B_TYPE_NONE               (0x00)
 #define B2B_TYPE_MEMBER             (0x01)
 #define B2B_TYPE_LEADER             (0x02)
