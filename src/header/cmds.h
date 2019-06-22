@@ -35,6 +35,8 @@ int _cmd_send_no_cmd(int argc, char** argv);
 int _cmd_sync_leader(int argc, char** argv);
 int _cmd_sync_member(int argc, char** argv);
 
+int _cmd_b2b_version(int argc, char** argv);
+
 
 static const shell_command_t _commands[] = {
     { "set_id", "set your own node id", _cmd_set_id },
@@ -46,6 +48,7 @@ static const shell_command_t _commands[] = {
     { "send_no_cmd", "(lead) send no cmd", _cmd_send_no_cmd},
     { "sync_leader", "(lead) initiate leader sync", _cmd_sync_leader},
     { "sync_member", "(member) initiate member sync", _cmd_sync_member},
+    { "version", "print bike2bike version", _cmd_b2b_version},
     { NULL, NULL, NULL }
 };
 
