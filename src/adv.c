@@ -35,7 +35,7 @@ static int gap_event_cb(struct ble_gap_event *event, void *arg)
 }
 
 /* sync leader has to be unencrypted for key sharing */
-static int adv_advertise_sync_leader(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
+void adv_advertise_sync_leader(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_t ad;
 
     uint8_t buf[BLE_HS_ADV_MAX_SZ];
@@ -50,7 +50,7 @@ static int adv_advertise_sync_leader(uint8_t cmd, uint8_t sender_id, uint8_t cmd
     bluetil_ad_add_name(&ad, B2B_ADV_NAME);
 
     /*  prepare our own protocol data */
-    uint8_t data[B2B_AD_SIZE + AES_KEY_SIZE];
+    uint8_t data[B2B_AD_AES_POS + AES_KEY_SIZE];
     /* validation value for checking after decrypt */
     memcpy(data, _b2b_validation_value, sizeof(_b2b_validation_value));
     /* sender id (from  package) */
@@ -73,8 +73,6 @@ static int adv_advertise_sync_leader(uint8_t cmd, uint8_t sender_id, uint8_t cmd
     _b2b_current_sent_cmd = cmd;
 
     start_advertise();
-
-    return 0;
 }
 
 void adv_advertising_stop(void) {
@@ -83,15 +81,22 @@ void adv_advertising_stop(void) {
         _b2b_current_sent_cmd = B2B_CMD_NONE;
     }
 }
-int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
-    if(cmd == B2B_CMD_SYNC_LEADER) {
-        return adv_advertise_sync_leader(cmd, sender_id, cmd_counter);
-    }
-    if(cmd == B2B_CMD_NONE) { 
-        return 0;
+
+void adv_send_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
+    _b2b_current_cmd_sender = sender_id;
+    _b2b_current_sent_cmd = cmd;
+    _b2b_current_cmd_counter = cmd_counter;
+    adv_advertise_start();
+}
+
+void adv_advertise_start(void) {
+    if(_b2b_current_sent_cmd == B2B_CMD_NONE 
+        || _b2b_current_sent_cmd == B2B_CMD_SYNC_LEADER) { 
+        return;
     }
 
     bluetil_ad_t ad;
+    uint8_t data_pos = 0;
 
     uint8_t buf[BLE_HS_ADV_MAX_SZ];
 
@@ -106,16 +111,31 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
 
     /*  prepare our own protocol data */
     uint8_t data[B2B_AD_SIZE];
+
     /* validation value for checking after decrypt */
     memcpy(data, _b2b_validation_value, sizeof(_b2b_validation_value));
+    data_pos += sizeof(_b2b_validation_value);
+
     /* sender id (from  package) */
-    memcpy(data + sizeof(_b2b_validation_value), &sender_id, sizeof(sender_id));
+    memcpy(data + data_pos, &_b2b_current_cmd_sender, sizeof(_b2b_current_cmd_sender));
+    data_pos += sizeof(_b2b_current_cmd_sender);
+
     /* command counter */
-    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id), 
-                        &cmd_counter, sizeof(cmd_counter));
+    memcpy(data + data_pos, 
+                        &_b2b_current_cmd_counter, sizeof(_b2b_current_cmd_counter));
+    data_pos += sizeof(_b2b_current_cmd_counter);
+
     /* cmd */
-    memcpy(data + sizeof(_b2b_validation_value) + sizeof(sender_id)
-                        + sizeof(cmd_counter), &cmd, sizeof(cmd)); 
+    memcpy(data + data_pos, &_b2b_current_sent_cmd, sizeof(_b2b_current_sent_cmd));
+    data_pos += sizeof(_b2b_current_sent_cmd);
+    
+    /* cmd_emerg_counter */
+    memcpy(data + data_pos, &_b2b_current_cmd_emerg_counter, sizeof(_b2b_current_cmd_emerg_counter));
+    data_pos += sizeof(_b2b_current_cmd_emerg_counter);
+
+    /* cmd_emerg */
+    memcpy(data + data_pos, &_b2b_current_sent_cmd_emerg, sizeof(_b2b_current_sent_cmd_emerg));
+    data_pos += sizeof(_b2b_current_sent_cmd_emerg);
 
     /* encrypt data */
     uint8_t data_enc[AES_BLOCK_SIZE];
@@ -125,10 +145,7 @@ int adv_advertise_packet(uint8_t cmd, uint8_t sender_id, uint8_t cmd_counter) {
     bluetil_ad_add(&ad, BLE_GAP_AD_SERVICE_DATA, data_enc, sizeof(data_enc));
     ble_gap_adv_set_data(ad.buf, ad.pos);
 
-    _b2b_current_cmd_counter = cmd_counter;
-    _b2b_current_sent_cmd = cmd;
-
     start_advertise();
 
-    return 0;
+    return;
 }
