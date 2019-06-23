@@ -26,7 +26,7 @@ static void* thread_leds(void* arg) {
                 if(event.event_type != flash_endless) {
                     leds_event_stop();
                 } else {
-                    event.event_type = none;
+                    event.event_type = none; 
                 } 
 
                 if(event_succ.event_type != none) {
@@ -79,7 +79,7 @@ static void event_flash(void) {
 }
 
 static void event_blink(void) {
-    if(event.leds_count > 1) {
+    if(event.leds_count >= 1) {
         for(uint8_t i = 0; i < event.leds_count; i++) {
             gpio_toggle(event.leds[i]);
         }

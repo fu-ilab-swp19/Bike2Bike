@@ -39,30 +39,71 @@ void ui_cmd_startup(void) {
 
 void ui_cmd_left(void) {
     printf("New command received: Left\n");
+    led_event evt;
+    evt.event_type = blink;
+    evt.leds[0] = LED_LEFT_GREEN;
+    evt.leds_count = 1;
+    evt.event_time_ms = LEDS_CMD_LEFT_DURATION_MS;
+    leds_new_event(&evt, NULL);
 }
 
 void ui_cmd_right(void) {
     printf("New command received: Right\n");
+    led_event evt;
+    evt.event_type = blink;
+    evt.leds[0] = LED_RIGHT_GREEN;
+    evt.leds_count = 1;
+    evt.event_time_ms = LEDS_CMD_RIGHT_DURATION_MS;
+    leds_new_event(&evt, NULL);
 }
 
 void ui_cmd_stop(void) {
     printf("New command received: Stop\n");
+    led_event evt;
+    evt.event_type = blink;
+    evt.leds[0] = LED_LEFT_RED;
+    evt.leds[1] = LED_RIGHT_RED;
+    evt.leds_count = 2;
+    evt.event_time_ms = LEDS_CMD_STOP_DURATION_MS;
+    leds_new_event(&evt, NULL);
 }
 
 void ui_cmd_sync_member(void) {
     printf("Sync member\n");
+    led_event evt;
+    evt.event_type = blink;
+    evt.leds[0] = LED_STATUS_RED;
+    evt.leds_count = 1;
+    evt.event_time_ms = 36000000; /* ~600 minutes */
+    leds_new_event(&evt, NULL);
 }
 
 void ui_cmd_sync_member_successful(void) {
     printf("Sync member succ\n");
+    leds_event_stop();
+    leds_set_status_green();
 }
 
 void ui_cmd_sync_leader(void) {
-    printf("Sync leader\n");
+    printf("Sending: Sync leader\n");
+    led_event evt;
+    evt.event_type = blink_color;
+    evt.leds[0] = LED_STATUS_GREEN;
+    evt.leds[1] = LED_STATUS_RED;
+    evt.leds_count = 2;
+    evt.event_time_ms = 36000000; /* ~600 minutes */
+    leds_new_event(&evt, NULL);
+}
+
+void ui_cmd_sync_leader_completed(void) {
+    printf("Sync leader completed\n");
+    leds_event_stop();
+    leds_set_status_green();
 }
 
 void ui_cmd_no_cmd(void) {
     printf("New command received: No cmd\n");
+    leds_event_stop();
 }
 
 void ui_test(void) {

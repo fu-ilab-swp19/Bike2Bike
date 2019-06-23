@@ -13,6 +13,7 @@ USEPKG += nimble
 
 USEMODULE += xtimer
 USEMODULE += shell
+USEMODULE += shell_commands
 USEMODULE += bluetil_ad
 USEMODULE += nimble_scanner
 USEMODULE += nimble_scanlist

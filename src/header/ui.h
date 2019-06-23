@@ -22,6 +22,7 @@ void ui_cmd_stop(void);
 void ui_cmd_sync_member(void);
 void ui_cmd_sync_member_successful(void); 
 void ui_cmd_sync_leader(void);
+void ui_cmd_sync_leader_completed(void);
 void ui_cmd_no_cmd(void);
 void ui_test(void);
 

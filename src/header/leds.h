@@ -23,6 +23,7 @@ extern "C" {
 
 #define LEDS_CMD_LEFT_DURATION_MS               (15000)
 #define LEDS_CMD_RIGHT_DURATION_MS              (15000)
+#define LEDS_CMD_STOP_DURATION_MS              (15000)
 
 enum led_event_type { none, flash, flash_endless, blink_color, blink};
 
