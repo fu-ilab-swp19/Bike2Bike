@@ -3,12 +3,10 @@
 static void event_flash(void);
 static void event_blink(void); 
 static void event_blink_color(void);
-static void event_reset(void);
 
 char stack_leds[THREAD_STACKSIZE_SMALL];
 
 mutex_t mutex_event;
-bool event_changed = false;
 led_event event = {none};
 
 static void* thread_leds(void* arg) {
@@ -23,7 +21,7 @@ static void* thread_leds(void* arg) {
 
             if(event.event_time_ms <= 0) {
                 printf("EVENT RESET\n");
-                event_reset();
+                leds_event_stop();
             } else {
                 switch (event.event_type)
                 {
@@ -48,7 +46,7 @@ static void* thread_leds(void* arg) {
                 xtimer_usleep(LEDS_ELAPSING_TIME_MS * 1000);
             }
         } else {
-            xtimer_usleep(500000);
+            xtimer_usleep(LEDS_SLEEP_NONE_EVENT_MS * 1000);
         }
     }
     return NULL;
@@ -87,7 +85,7 @@ static void event_blink_color(void) {
     }
 }
 
-static void event_reset(void) {
+void leds_event_stop(void) {
     if(event.event_type != none) {
         event.event_type = none;
         for(uint8_t i = 0; i < event.leds_count; i++) {
@@ -98,9 +96,22 @@ static void event_reset(void) {
 
 void leds_new_event(led_event* led_evt) {
     mutex_lock(&mutex_event);
-    event_reset();
+    leds_event_stop();
     memcpy(&event, led_evt, sizeof(event));
     mutex_unlock(&mutex_event);
+}
+
+void leds_set_status_green(void) {
+    gpio_write(LED_STATUS_GREEN, 1);
+}
+
+void leds_set_status_red(void) {
+    gpio_write(LED_STATUS_RED, 1);
+}
+
+void leds_reset_status(void) {
+    gpio_write(LED_STATUS_GREEN, 0);
+    gpio_write(LED_STATUS_RED, 0);
 }
 
 void leds_init(void) {

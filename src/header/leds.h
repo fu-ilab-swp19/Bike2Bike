@@ -19,6 +19,10 @@ extern "C" {
 /* don't change value! */
 #define LEDS_PER_EVENT                          (2)
 #define LEDS_ELAPSING_TIME_MS                   (500)   
+#define LEDS_SLEEP_NONE_EVENT_MS                (500)
+
+#define LEDS_CMD_LEFT_DURATION_MS               (15000)
+#define LEDS_CMD_RIGHT_DURATION_MS              (15000)
 
 enum led_event_type { none, flash, blink_color, blink};
 
@@ -31,6 +35,10 @@ typedef struct {
 
 void leds_init(void);
 void leds_new_event(led_event* led_evt); 
+void leds_event_stop(void);
+void leds_set_status_green(void);
+void leds_set_status_red(void);
+void leds_reset_status(void);
 
 #ifdef __cplusplus
 }

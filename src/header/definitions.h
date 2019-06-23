@@ -25,9 +25,6 @@ extern "C" {
 #define B2B_CMD_NO_CMD              (0x05)
 #define B2B_CMD_NONE                (0x06)
 
-#define B2B_CMD_LEFT_DURATION_MS     (15000)
-#define B2B_CMD_RIGHT_DURATION_MS    (15000)
-
 #define B2B_AD_SIZE                 (0x07)
 #define B2B_AD_AES_POS              (0x05)
 #define B2B_ADV_NAME_BASE_SIZE      (0x03)
