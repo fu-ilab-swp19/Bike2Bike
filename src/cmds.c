@@ -11,7 +11,6 @@ int _cmd_set_id(int argc, char** argv) {
 int _cmd_set_leader(int argc, char** argv) {
     _b2b_user_type = B2B_TYPE_LEADER;
     printf("You are leader now!\n");
-	set_status_red();
     (void) argc;
     (void) argv;
     return 0;
@@ -46,10 +45,7 @@ int _cmd_send_left(int argc, char** argv) {
     }
     _b2b_current_cmd_counter++;
     adv_send_packet(B2B_CMD_LEFT, _b2b_own_id, _b2b_current_cmd_counter);
-
-
     printf("Sending command: Left\n");
-	signal_left_red();
     (void) argc;
     (void) argv;
     return 0; 
@@ -65,7 +61,6 @@ int _cmd_send_right(int argc, char** argv) {
 
     adv_send_packet(B2B_CMD_RIGHT, _b2b_own_id, _b2b_current_cmd_counter);
     printf("Sending command: Right\n");
-	signal_right_red();
     (void) argc;
     (void) argv;
     return 0;

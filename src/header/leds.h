@@ -1,0 +1,39 @@
+#ifndef LEDS_H
+#define LEDS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "board.h"
+#include "periph/gpio.h"
+#include "periph_conf.h"
+#include "xtimer.h"
+#include "mutex.h"
+
+#include "gpio_config.h"
+
+/* don't change value! */
+#define LEDS_PER_EVENT                          (2)
+#define LEDS_ELAPSING_TIME_MS                   (500)   
+
+enum led_event_type { none, flash, blink_color, blink};
+
+typedef struct {
+    enum led_event_type event_type;
+    int8_t leds[LEDS_PER_EVENT];
+    uint8_t leds_count;
+    int16_t event_time_ms;
+} led_event;  
+
+void leds_init(void);
+void leds_new_event(led_event* led_evt); 
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

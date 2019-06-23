@@ -1,7 +1,5 @@
 #include "header/recv.h"
 
-
-
 static int check_cmd_counter(uint16_t send_cmd, uint16_t curr_cmd);
 static void prepare_b2b_packet(b2b_packet* packet, uint8_t* data, uint8_t len);
 
@@ -14,7 +12,7 @@ static void process_b2b_packet_leader(b2b_packet* packet) {
         if(packet->cmd_emerg == B2B_CMD_STOP) {
             _b2b_current_sent_cmd_emerg = B2B_CMD_NONE;
             _b2b_current_cmd_emerg_counter = packet->cmd_emerg_counter+1;
-            feedback_cmd_stop();
+            ui_cmd_stop();
             adv_advertise_start();
         }
     }
@@ -35,7 +33,7 @@ static void process_b2b_packet_member(b2b_packet* packet) {
                             "Session AES128 key: ");
             
             adv_advertising_stop();
-            feedback_cmd_sync_member_successful();
+            ui_cmd_sync_member_successful();
             return;
         }
     }
@@ -46,7 +44,7 @@ static void process_b2b_packet_member(b2b_packet* packet) {
         if(check_cmd_counter(packet->cmd_counter, _b2b_current_cmd_counter)) {
             _b2b_current_sent_cmd = packet->cmd;
             _b2b_current_cmd_counter = packet->cmd_counter;
-            feedback_cmd_changed();
+            ui_cmd_changed();
             adv_advertise_start();
         }
 

@@ -11,7 +11,7 @@ extern "C" {
 #define AES_KEY_SIZE                (16U)
 #define AES_BLOCK_SIZE              (16U)
 
-#define B2B_VERSION                 "0.72"
+#define B2B_VERSION                 "0.80"
 #define B2B_TYPE_NONE               (0x00)
 #define B2B_TYPE_MEMBER             (0x01)
 #define B2B_TYPE_LEADER             (0x02)
@@ -24,6 +24,9 @@ extern "C" {
 #define B2B_CMD_STOP                (0x04)
 #define B2B_CMD_NO_CMD              (0x05)
 #define B2B_CMD_NONE                (0x06)
+
+#define B2B_CMD_LEFT_DURATION_MS     (15000)
+#define B2B_CMD_RIGHT_DURATION_MS    (15000)
 
 #define B2B_AD_SIZE                 (0x07)
 #define B2B_AD_AES_POS              (0x05)

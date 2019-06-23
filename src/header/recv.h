@@ -16,8 +16,7 @@ extern "C" {
 #include "util.h"
 #include "adv.h"
 #include "crypto.h"
-#include "ledbutton.h"
-#include "feedback.h"
+#include "ui.h"
 
 typedef struct {
     uint8_t sender;
