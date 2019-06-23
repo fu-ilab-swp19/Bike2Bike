@@ -1,5 +1,17 @@
 #include "header/cmds.h"
 
+static bool status_checks(void);
+static void set_leader(void);
+static void sync_leader_completed(int argc, char** argv);
+
+static bool status_checks(void) {
+    if(_b2b_current_sent_cmd == B2B_CMD_SYNC_LEADER) {
+        printf("Currently synchronizing; please stop it before doing something else!\n");
+        return false;
+    }
+    return true;
+}
+
 int _cmd_set_id(int argc, char** argv) {
     if(argc >= 2) {
         _b2b_own_id = atoi(argv[1]);
@@ -8,12 +20,9 @@ int _cmd_set_id(int argc, char** argv) {
     return 0;
 }
 
-int _cmd_set_leader(int argc, char** argv) {
+static void set_leader(void) {
     _b2b_user_type = B2B_TYPE_LEADER;
-    printf("You are leader now!\n");
-    (void) argc;
-    (void) argv;
-    return 0;
+    return;
 }
 
 int _cmd_set_cmd_counter(int argc, char** argv) {
@@ -29,9 +38,11 @@ int _cmd_send_no_cmd(int argc, char** argv) {
         printf("Not allowed command: _cmd_send_no_cmd : You are not leader\n");
         return 0;
     }
+
     _b2b_current_cmd_counter++;
     adv_send_packet(B2B_CMD_NO_CMD, _b2b_own_id, _b2b_current_cmd_counter);
-    printf("Sending command:no command\n");
+    ui_cmd_no_cmd();
+    printf("Sending command: no command\n");
 
     (void) argc;
     (void) argv;
@@ -43,13 +54,17 @@ int _cmd_send_left(int argc, char** argv) {
         printf("Not allowed command: _cmd_send_left : You are not leader\n");
         return 0;
     }
+    if(!status_checks()) {
+        return 0;
+    }
+
     _b2b_current_cmd_counter++;
     adv_send_packet(B2B_CMD_LEFT, _b2b_own_id, _b2b_current_cmd_counter);
+    ui_cmd_left();
     printf("Sending command: Left\n");
     (void) argc;
     (void) argv;
     return 0; 
-
 }
 
 int _cmd_send_right(int argc, char** argv) {
@@ -57,38 +72,71 @@ int _cmd_send_right(int argc, char** argv) {
         printf("Not allowed command: _cmd_send_right : You are not leader\n");
         return 0;
     }
+    if(!status_checks()) {
+        return 0;
+    }
+
     _b2b_current_cmd_counter++;
 
     adv_send_packet(B2B_CMD_RIGHT, _b2b_own_id, _b2b_current_cmd_counter);
+    ui_cmd_right();
     printf("Sending command: Right\n");
     (void) argc;
     (void) argv;
     return 0;
 }
 
-int _cmd_send_stop(int argc, char** argv) {
-    _b2b_current_cmd_emerg_counter++;
-    _b2b_current_sent_cmd_emerg = B2B_CMD_STOP;
+static void send_stop_leader(void) {
+    _b2b_current_cmd_counter++;
+
     adv_send_packet(B2B_CMD_STOP, _b2b_own_id, _b2b_current_cmd_counter);
-    printf("Sending command: Stop\n");
-    
+    ui_cmd_stop();
+    printf("Sending command: Right\n");
+}
+
+int _cmd_send_stop(int argc, char** argv) {
+    if(!status_checks()) {
+        return 0;
+    }
+    if(_b2b_user_type == B2B_TYPE_LEADER) {
+        send_stop_leader();
+    } else {
+        _b2b_current_cmd_emerg_counter++;
+        _b2b_current_sent_cmd_emerg = B2B_CMD_STOP;
+        adv_send_packet(B2B_CMD_STOP, _b2b_own_id, _b2b_current_cmd_counter);
+        ui_cmd_stop();
+        printf("Sending command: Stop\n");
+    }
     (void) argc;
     (void) argv;
     return 0;
 }
 
 int _cmd_sync_leader(int argc, char** argv) {
-    if (_b2b_user_type != B2B_TYPE_LEADER) {
-        printf("Not allowed command: _cmd_sync_leader : You are not leader\n");
+    if (_b2b_user_type == B2B_TYPE_MEMBER && _b2b_current_leader_id != -1) {
+        printf("Not allowed command: _cmd_sync_leader : You are already connected to a leader\n");
         return 0;
     }
-    _b2b_current_leader_id = _b2b_own_id;
-    _b2b_current_cmd_counter++;
-    adv_advertise_sync_leader(B2B_CMD_SYNC_LEADER, _b2b_own_id, _b2b_current_cmd_counter);
-    printf("Sending command: Sync lead\n");
+    set_leader();
+
+    if(_b2b_current_sent_cmd == B2B_CMD_SYNC_LEADER) {
+        sync_leader_completed(argc, argv);
+    } else {
+        _b2b_current_leader_id = _b2b_own_id;
+        _b2b_current_cmd_counter++;
+        adv_advertise_sync_leader(B2B_CMD_SYNC_LEADER, _b2b_own_id, _b2b_current_cmd_counter);
+        ui_cmd_sync_leader();
+        printf("Sending command: Sync lead\n");
+    }
     (void) argc;
     (void) argv;
+    
     return 0;
+}
+
+static void sync_leader_completed(int argc, char** argv) {
+    ui_cmd_sync_leader_completed();
+    _cmd_send_no_cmd(argc, argv);
 }
 
 int _cmd_sync_member(int argc, char** argv) {
@@ -97,7 +145,9 @@ int _cmd_sync_member(int argc, char** argv) {
         return 0;
     }
     adv_send_packet(B2B_CMD_SYNC_MEMBER, _b2b_own_id, _b2b_current_cmd_counter);
+    ui_cmd_sync_member();
     printf("Sending command: Sync member\n");
+    
     (void) argc;
     (void) argv;
     return 0;
