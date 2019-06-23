@@ -51,6 +51,7 @@ static void init(void) {
     _b2b_current_cmd_counter = 0;
     _b2b_current_cmd_emerg_counter = 0;
     printf("Init completed\n");
+    ui_cmd_startup();
 }
 
 static void* thread_program(void* arg) {

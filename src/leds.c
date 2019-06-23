@@ -1,13 +1,16 @@
 #include "header/leds.h"
 
 static void event_flash(void);
+static void event_flash_endless(void);
 static void event_blink(void); 
 static void event_blink_color(void);
+static void event_activate_next_event(void);
 
 char stack_leds[THREAD_STACKSIZE_SMALL];
 
 mutex_t mutex_event;
 led_event event = {none};
+led_event event_succ = {none};
 
 static void* thread_leds(void* arg) {
     (void) arg;
@@ -20,13 +23,23 @@ static void* thread_leds(void* arg) {
             mutex_lock(&mutex_event);
 
             if(event.event_time_ms <= 0) {
-                printf("EVENT RESET\n");
-                leds_event_stop();
+                if(event.event_type != flash_endless) {
+                    leds_event_stop();
+                } else {
+                    event.event_type = none;
+                } 
+
+                if(event_succ.event_type != none) {
+                    event_activate_next_event();
+                }
             } else {
                 switch (event.event_type)
                 {
                     case flash:
                         event_flash();
+                        break;
+                    case flash_endless:
+                        event_flash_endless();
                         break;
                     case blink:
                         event_blink();
@@ -52,6 +65,12 @@ static void* thread_leds(void* arg) {
     return NULL;
 }
 
+static void event_flash_endless(void) {
+    /* set leds on */
+    for(uint8_t i = 0; i < event.leds_count; i++) {
+        gpio_write(event.leds[i], 1);
+   }
+}
 static void event_flash(void) {
     /* set leds on */
     for(uint8_t i = 0; i < event.leds_count; i++) {
@@ -60,10 +79,6 @@ static void event_flash(void) {
 }
 
 static void event_blink(void) {
-    if(event.leds_count == 1) {
-        gpio_toggle(event.leds[0]);
-    }
-
     if(event.leds_count > 1) {
         for(uint8_t i = 0; i < event.leds_count; i++) {
             gpio_toggle(event.leds[i]);
@@ -72,17 +87,50 @@ static void event_blink(void) {
 }
 
 static void event_blink_color(void) {
-    if(event.leds_count == 2) {
+    for(uint8_t i = 0; i < event.leds_count; i += 2) {
         uint8_t led1, led2;
-        led1 = gpio_read(event.leds[0]);
-        led2 = gpio_read(event.leds[1]);
+        led1 = gpio_read(event.leds[i]);
+        led2 = gpio_read(event.leds[i+1]);
         if(led1 == 0 && led2 == 0) {
             led1 = 1;
         }
 
-        gpio_write(event.leds[0], led2);
-        gpio_write(event.leds[1], led1);
+        gpio_write(event.leds[i], led2);
+        gpio_write(event.leds[i+1], led1);
     }
+}
+
+static bool event_validation(led_event* evt) {
+    switch(evt->event_type) {
+        case none:
+            break;
+        case blink:
+            if(evt->leds_count == 0) {
+                return false;
+            }
+            break;
+        case blink_color:
+            if(evt->leds_count%2 != 0) {
+                return false;
+            }
+            break;
+        case flash:
+            if(evt->leds_count == 0) {
+                return false;
+            }
+            break;
+        case flash_endless:
+            if(evt->leds_count == 0) {
+                return false;
+            }
+            break;
+    }
+
+    if(evt->event_time_ms <= 0) {
+        return false;
+    }
+
+    return true;
 }
 
 void leds_event_stop(void) {
@@ -94,11 +142,27 @@ void leds_event_stop(void) {
     }
 }
 
-void leds_new_event(led_event* led_evt) {
-    mutex_lock(&mutex_event);
-    leds_event_stop();
-    memcpy(&event, led_evt, sizeof(event));
-    mutex_unlock(&mutex_event);
+void leds_new_event(led_event* evt, led_event* evt_succ) {
+    if(event_validation(evt)) {
+        mutex_lock(&mutex_event);
+        leds_event_stop();
+        memcpy(&event, evt, sizeof(event));
+        
+        if(evt_succ != NULL) {
+            memcpy(&event_succ, evt_succ, sizeof(event_succ));
+        }
+
+        mutex_unlock(&mutex_event);
+    } else
+    {
+        printf("LED event error: Event is invalid!\n");
+    }
+    
+}
+
+static void event_activate_next_event(void) {
+    memcpy(&event, &event_succ, sizeof(event));
+    event_succ.event_type = none;
 }
 
 void leds_set_status_green(void) {

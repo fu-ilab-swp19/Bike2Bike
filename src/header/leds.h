@@ -17,24 +17,24 @@ extern "C" {
 #include "gpio_config.h"
 
 /* don't change value! */
-#define LEDS_PER_EVENT                          (2)
+#define LEDS_PER_EVENT                          (6)
 #define LEDS_ELAPSING_TIME_MS                   (500)   
 #define LEDS_SLEEP_NONE_EVENT_MS                (500)
 
 #define LEDS_CMD_LEFT_DURATION_MS               (15000)
 #define LEDS_CMD_RIGHT_DURATION_MS              (15000)
 
-enum led_event_type { none, flash, blink_color, blink};
+enum led_event_type { none, flash, flash_endless, blink_color, blink};
 
 typedef struct {
     enum led_event_type event_type;
-    int8_t leds[LEDS_PER_EVENT];
+    uint8_t leds[LEDS_PER_EVENT];
     uint8_t leds_count;
-    int16_t event_time_ms;
+    int32_t event_time_ms;
 } led_event;  
 
 void leds_init(void);
-void leds_new_event(led_event* led_evt); 
+void leds_new_event(led_event* evt, led_event* evt_succ); 
 void leds_event_stop(void);
 void leds_set_status_green(void);
 void leds_set_status_red(void);
