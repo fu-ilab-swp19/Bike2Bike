@@ -1,4 +1,0 @@
-Was passiert wenn mehrere Gruppen die Software nutzen? Es darf keine Zuweisungsprobleme geben!
-    -> Session-ID in den Header?
-
-Header: Kommt auch die ID vom CMD-Sender rein? Also OWN-ID / SENDER-ID / 

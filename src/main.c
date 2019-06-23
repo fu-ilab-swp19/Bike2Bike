@@ -2,7 +2,7 @@
 #include "header/recv.h"
 #include "header/adv.h"
 #include "header/crypto.h"
-#include "header/ledbutton.h"
+#include "header/ui.h"
 
 uint8_t _b2b_validation_value[] = { 0xAC, 0xDC };
 const char   B2B_ADV_NAME[] = "B2B";
@@ -38,7 +38,7 @@ int main(void) {
 }
 
 static void init(void) {
-	//led_init();
+	ui_init();
     crypto_init();
     recv_init();
 

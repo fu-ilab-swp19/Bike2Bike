@@ -1,0 +1,22 @@
+UI Zustände:
+
+Links abbiegen:
+Linke LED blinkt grün
+
+Rechts abbiegen:
+Rechte LED blinkt grün
+
+Stop (Leader-Signal):
+Linke + Rechte LED blinkt rot
+
+Stop:
+Linke + Rechte LED leuchtet
+
+Kein Befehl:
+Nix blinkt
+
+Synchronisieren (Member):
+Status LED blinkt rot -> (Erfolg) -> Status LED leuchtet grün
+
+Synchronisieren (Leader):
+Status LED blinkt rot/grün
