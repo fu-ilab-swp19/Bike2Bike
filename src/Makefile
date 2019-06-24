@@ -4,12 +4,11 @@ APPLICATION = bike2bike
 # If no BOARD is found in the environment, use this default:
 BOARD ?= airfy-beacon
 
-BOARD_WHITELIST := nrf52dk airfy-beacon
+BOARD_WHITELIST := airfy-beacon
 
-# This has to be the absolute path to the RIOT base directory:
 RIOTBASE ?= $(CURDIR)/../RIOT
 
-USEPKG += nimble
+USEPKG += nimble 
 
 USEMODULE += xtimer
 USEMODULE += shell

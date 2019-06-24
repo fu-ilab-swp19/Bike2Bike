@@ -3,6 +3,7 @@
 #include "header/adv.h"
 #include "header/crypto.h"
 #include "header/ui.h"
+#include "periph/pm.h"
 
 static void check_for_new_actions(void);
 static void* thread_program(void* arg);
@@ -88,6 +89,7 @@ static void check_for_new_actions(void) {
             break;
         case action_reboot:
             /* there has to be a clean way to reboot the board?! */
+            pm_reboot();
             printf("Let it crash, let it crash, let it crash: %d\n", *(&ctx-10000));
             break;
     }
