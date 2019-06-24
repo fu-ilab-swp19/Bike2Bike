@@ -16,10 +16,8 @@ USEMODULE += shell
 USEMODULE += shell_commands
 USEMODULE += bluetil_ad
 USEMODULE += nimble_scanner
-USEMODULE += nimble_scanlist
 USEMODULE += crypto
 USEMODULE += periph_gpio_irq
-
 
 BLE_RESERVED_PACKAGE_SIZE = 70
 CFLAGS += -DMYNEWT_VAL_MSYS_1_BLOCK_SIZE=$(BLE_RESERVED_PACKAGE_SIZE)

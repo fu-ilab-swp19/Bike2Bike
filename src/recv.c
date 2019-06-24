@@ -154,7 +154,7 @@ static void nimble_scanner_packet_received(const ble_addr_t *addr, int8_t rssi,
 
 int recv_scan_for_new_packets(void) {
     nimble_scanner_start();
-    xtimer_sleep(2);
+    xtimer_usleep(300000);
     nimble_scanner_stop();
     return 0;
 }

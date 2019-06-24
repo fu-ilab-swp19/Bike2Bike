@@ -10,6 +10,12 @@ extern "C" {
 #include <string.h>
 #include "definitions.h"
 #include "leds.h"
+#include "buttons.h"
+#include "mutex.h"
+
+enum action { action_none, action_left, action_right, action_stop, action_sync_leader, 
+                action_sync_member, action_reboot };
+
 
 void ui_init(void);
 
@@ -24,7 +30,8 @@ void ui_cmd_sync_member_successful(void);
 void ui_cmd_sync_leader(void);
 void ui_cmd_sync_leader_completed(void);
 void ui_cmd_no_cmd(void);
-void ui_test(void);
+void ui_set_action(enum action new_action);
+enum action ui_get_action(void);
 
 #ifdef __cplusplus
 }

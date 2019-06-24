@@ -1,7 +1,13 @@
 #include "header/ui.h"
 
+enum action action;
+mutex_t mutex_action;
+
 void ui_init(void) {
+    mutex_init(&mutex_action);
+    action = action_none;
     leds_init();
+    buttons_init();
 }
 
 void ui_cmd_changed(void) {
@@ -48,7 +54,7 @@ void ui_cmd_left(void) {
 }
 
 void ui_cmd_right(void) {
-    printf("New command received: Right\n");
+    printf("New command: Right\n");
     led_event evt;
     evt.event_type = blink;
     evt.leds[0] = LED_RIGHT_GREEN;
@@ -58,7 +64,7 @@ void ui_cmd_right(void) {
 }
 
 void ui_cmd_stop(void) {
-    printf("New command received: Stop\n");
+    printf("New command: Stop\n");
     led_event evt;
     evt.event_type = blink;
     evt.leds[0] = LED_LEFT_RED;
@@ -106,6 +112,16 @@ void ui_cmd_no_cmd(void) {
     leds_event_stop();
 }
 
-void ui_test(void) {
+void ui_set_action(enum action new_action) {
+    mutex_lock(&mutex_action);
+    action = new_action;
+    mutex_unlock(&mutex_action);
+}
 
+enum action ui_get_action(void) {
+    mutex_lock(&mutex_action);
+    enum action ret = action;
+    action = action_none;
+    mutex_unlock(&mutex_action);
+    return ret;
 }
