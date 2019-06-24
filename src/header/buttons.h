@@ -13,7 +13,12 @@ extern "C" {
 #include "periph_conf.h"
 #include "xtimer.h"
 
+#include "cmds.h"
 #include "gpio_config.h"
+
+#define BUTTONS_THREAD_SLEEP_MS                 (250000)
+
+void buttons_init(void);
 
 #ifdef __cplusplus
 }

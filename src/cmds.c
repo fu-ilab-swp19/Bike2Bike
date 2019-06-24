@@ -57,11 +57,10 @@ int _cmd_send_left(int argc, char** argv) {
     if(!status_checks()) {
         return 0;
     }
-
+    
     _b2b_current_cmd_counter++;
     adv_send_packet(B2B_CMD_LEFT, _b2b_own_id, _b2b_current_cmd_counter);
     ui_cmd_left();
-    printf("Sending command: Left\n");
     (void) argc;
     (void) argv;
     return 0; 
@@ -80,7 +79,6 @@ int _cmd_send_right(int argc, char** argv) {
 
     adv_send_packet(B2B_CMD_RIGHT, _b2b_own_id, _b2b_current_cmd_counter);
     ui_cmd_right();
-    printf("Sending command: Right\n");
     (void) argc;
     (void) argv;
     return 0;
@@ -91,7 +89,6 @@ static void send_stop_leader(void) {
 
     adv_send_packet(B2B_CMD_STOP, _b2b_own_id, _b2b_current_cmd_counter);
     ui_cmd_stop();
-    printf("Sending command: Right\n");
 }
 
 int _cmd_send_stop(int argc, char** argv) {
@@ -126,7 +123,6 @@ int _cmd_sync_leader(int argc, char** argv) {
         _b2b_current_cmd_counter++;
         adv_advertise_sync_leader(B2B_CMD_SYNC_LEADER, _b2b_own_id, _b2b_current_cmd_counter);
         ui_cmd_sync_leader();
-        printf("Sending command: Sync lead\n");
     }
     (void) argc;
     (void) argv;

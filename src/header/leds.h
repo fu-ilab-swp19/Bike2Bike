@@ -13,6 +13,7 @@ extern "C" {
 #include "periph_conf.h"
 #include "xtimer.h"
 #include "mutex.h"
+#include "thread.h"
 
 #include "gpio_config.h"
 
@@ -23,7 +24,7 @@ extern "C" {
 
 #define LEDS_CMD_LEFT_DURATION_MS               (15000)
 #define LEDS_CMD_RIGHT_DURATION_MS              (15000)
-#define LEDS_CMD_STOP_DURATION_MS              (15000)
+#define LEDS_CMD_STOP_DURATION_MS               (15000)
 
 enum led_event_type { none, flash, flash_endless, blink_color, blink};
 

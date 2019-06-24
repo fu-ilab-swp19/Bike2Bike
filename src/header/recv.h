@@ -9,7 +9,6 @@ extern "C" {
 #include <stdlib.h>
 #include <string.h>
 #include "nimble_scanner.h"
-#include "nimble_scanlist.h"
 #include "net/bluetil/ad.h"
 #include "xtimer.h"
 #include "definitions.h"

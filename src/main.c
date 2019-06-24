@@ -4,6 +4,10 @@
 #include "header/crypto.h"
 #include "header/ui.h"
 
+static void check_for_new_actions(void);
+static void* thread_program(void* arg);
+static void init(void);
+
 uint8_t _b2b_validation_value[] = { 0xAC, 0xDC };
 const char   B2B_ADV_NAME[] = "B2B";
 
@@ -18,8 +22,6 @@ int8_t _b2b_current_sent_cmd_emerg;
 
 char stack[THREAD_STACKSIZE_DEFAULT];
 
-static void* thread_program(void* arg);
-static void init(void);
 
 int main(void) {
     init();
@@ -56,10 +58,37 @@ static void init(void) {
 
 static void* thread_program(void* arg) {
     while(true) {
+        check_for_new_actions();
         recv_scan_for_new_packets();
-        xtimer_sleep(2);
+        xtimer_usleep(300000);
     }
     (void) arg;
     return NULL;
+}
+
+static void check_for_new_actions(void) {
+    enum action ctx = ui_get_action();
+    switch(ctx) {
+        case action_none:
+            break;
+        case action_left:
+            _cmd_send_left(0, NULL);
+            break;
+        case action_right:
+            _cmd_send_right(0, NULL);
+            break;
+        case action_stop:
+            _cmd_send_stop(0, NULL);
+            break;
+        case action_sync_leader:
+            _cmd_sync_leader(0, NULL);
+            break;
+        case action_sync_member:
+            _cmd_sync_member(0, NULL);
+            break;
+        case action_reboot:
+            printf("Not implemented\n");
+            break;
+    }
 }
 
