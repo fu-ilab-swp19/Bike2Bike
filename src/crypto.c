@@ -4,6 +4,7 @@ cipher_t _b2b_cipher;
 uint8_t _b2b_aes_key[AES_KEY_SIZE];
 
 void crypto_init(void) {
+    crypto_key_generate();
     if(cipher_init(&_b2b_cipher, CIPHER_AES_128, _b2b_aes_key, AES_KEY_SIZE) < 0) {
         perror("Crypto init failed!\n");
         exit(-1);

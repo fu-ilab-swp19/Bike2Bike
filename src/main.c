@@ -88,9 +88,7 @@ static void check_for_new_actions(void) {
             _cmd_sync_member(0, NULL);
             break;
         case action_reboot:
-            /* there has to be a clean way to reboot the board?! */
             pm_reboot();
-            printf("Let it crash, let it crash, let it crash: %d\n", *(&ctx-10000));
             break;
     }
 }
